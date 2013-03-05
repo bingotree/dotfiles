@@ -16,15 +16,25 @@ hardstatus string '%{= kW}%-Lw%{= bW}%n %t%{= kW}%+Lw%< %{= kr}%-=%D %d %M %Y %c
 # Allow normal scrolling in xterm
 # termcapinfo xterm ti@:te@
 
-# Change screen's CTRL-A default to something less used by me.
+
+# SCREEN meta (command) character.
+#
+# CTRL-A -- This is the default.
+# I don't use this because ctrl-A is used to jump to the beginning of a line in BASH.
+# escape "^Aa"
+#
 # CTRL-O
-escape "^oo"
+# I don't use this because ctrl-O is used to jump to a previous position in vim.
+# escape "^Oo"
+#
+# CTRL-@ -- acceptable ASCII ctrl character, but ^@@ or ^@2 causes issue when switching to window 2, so I found the following works:
+escape "^@a"
 
 # Custom screen keymappings
 # Show all windows.
 bind ' ' windowlist -b
 
-# To unbind, just bind without a definition
+# To unbind, eg just bind without a definition
 # bind s
 
 # Set default window title.
@@ -32,7 +42,7 @@ shelltitle "Code"
 
 # Setup default windows.
 screen -t "Code"
-screen -t "DB" 
+screen -t "DB"
 screen -t "PHP LOG" tail -f $PHP_LOG
 screen -t "APACHE LOG" tail -f $APACHE_LOG
 #screen -t "Mail" mutt

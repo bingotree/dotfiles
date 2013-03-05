@@ -9,8 +9,15 @@ archive=~/dotarchive
 
 mkdir -p $archive
 
-files="bashrc vimrc screenrc"
+# Make sure you have the revisioned copy of the file in $dest
+files="vim bashrc vimrc screenrc"
 for file in $files; do
-    mv ~/.$file $archive
+    if [ -d ~/.$file ]; then
+        echo "Creating directory .$file in $archive";
+        cp -r ~/.$file $archive
+    else
+        echo "Copying file .$file to $archive";
+        mv ~/.$file $archive
+    fi
     ln -s $dest/$file ~/.$file
 done

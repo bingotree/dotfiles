@@ -9,7 +9,6 @@
 " This line should not be removed as it ensures that various options are
 " properly set to work with the Vim-related packages available in Debian.
 runtime! debian.vim
-
 "
 "
 " Uncomment the next line to make Vim more Vi-compatible
@@ -152,6 +151,7 @@ nnoremap <leader>mhh :r ~/.vim/snippets/html.html<cr>
 if filereadable("/etc/vim/vimrc.local")
   source /etc/vim/vimrc.local
 endif
+set nopaste
 
 "Add a splash messages to output on loading vim
 "echo '>^.^<'
