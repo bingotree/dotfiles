@@ -1,0 +1,41 @@
+# See this great resource on screen:
+# http://www.math.utah.edu/docs/info/screen_toc.html
+startup_message off
+
+# Remove the horrible visual bell
+vbell off
+
+# Set the scrollback buffer to 30k lines.
+defscrollback 30000 
+
+hardstatus on
+hardstatus alwayslastline
+hardstatus string '%{= kW}%-Lw%{= bW}%n %t%{= kW}%+Lw%< %{= kr}%-=%D %d %M %Y %c:%s%{-}'
+# caption always "%{kB}%?%-Lw%?%{bw}%n*%f %t%?(%u)%?%{kB}%?%+Lw%?"
+
+# Allow normal scrolling in xterm
+# termcapinfo xterm ti@:te@
+
+# Change screen's CTRL-A default to something less used by me.
+# CTRL-O
+escape "^oo"
+
+# Custom screen keymappings
+# Show all windows.
+bind ' ' windowlist -b
+
+# To unbind, just bind without a definition
+# bind s
+
+# Set default window title.
+shelltitle "Code"
+
+# Setup default windows.
+screen -t "Code"
+screen -t "DB" 
+screen -t "PHP LOG" tail -f $PHP_LOG
+screen -t "APACHE LOG" tail -f $APACHE_LOG
+#screen -t "Mail" mutt
+
+# Select window 0
+select 0

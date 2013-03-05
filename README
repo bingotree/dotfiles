@@ -1,0 +1,5 @@
+Public Repo: https://github.com/bingotree/dotfiles
+Author: Brian Duncan
+
+Description: Maintain a versioned collection of configuration files a la Michael Smalley's technique:
+http://blog.smalleycreative.com/tutorials/using-git-and-github-to-manage-your-dotfiles/
