@@ -27,29 +27,27 @@ set rs term=builtin_ansi ai et smarttab ts=4 shiftwidth=4
 
 " Set keymappings here:
 noremap d; d/;<CR>
-noremap tw ve~h 
-noremap [] i[<Esc>ea]
 cnoremap w!! w !sudo tee >/dev/null %
 
 " Make space more useful
 noremap <space> ve
+
+" Move lines up and down
 noremap - ddp
 noremap _ ddkP
-
-" Create closing brackets, parens, goto edit the space between.
-inoremap [[ []<esc>i
-inoremap (( ()<esc>i
-inoremap [" ["]<esc><left>i"
-inoremap [' [']<esc><left>i'
-inoremap (" (")<esc><left>i"
-inoremap (' (')<esc><left>i'
-inoremap {{ <cr>{<cr>}<esc>O<tab>
 
 " More escape options
 inoremap asdf <Esc>
 
 let mapleader = ";"
-noremap <leader><leader> <Esc>
+nnoremap <leader><leader> <Esc>
+nnoremap <leader>tw ve~h 
+nnoremap <leader>[ mvwbi[<Esc>ea]<Esc>`vl
+nnoremap <leader>( mvwbi(<Esc>ea)<Esc>`vl
+nnoremap <leader>' mvwbi'<Esc>ea'<Esc>`vl
+nnoremap <leader>" mvwbi"<Esc>ea"<Esc>`vl
+
+" TEST ON ME 'blah' blah '('blah') "blachblah" blahb '
 
 " Edit and source vimrc file quickly
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
@@ -67,6 +65,15 @@ nnoremap <leader>bb :bn<cr>
 nnoremap <leader>bl :ls<cr>
 nnoremap <leader>ba :ball<cr>
 
+" No-buffer yank
+nnoremap <leader>y "1y
+nnoremap <leader>Y "1Y
+nnoremap <leader>p "1p
+nnoremap <leader>P "1p
+
+" New-line, stay in normal mode
+nnoremap <cr> i<cr><esc>l
+
 " Move letters around.
 nnoremap <leader>l "zdlp
 nnoremap <leader>h "zdhph
@@ -74,35 +81,44 @@ nnoremap <leader>t "zdlph
 nnoremap <leader>k "zdlkP
 nnoremap <leader>j "zdljP
 
+"Search for letter under cursor
+nnoremap <leader>z "zyl/<C-R>z<cr>
+
+"Get rid of highlighting
+nnoremap <leader>nh :nohl<cr>
+
 " Comment the current line.
 " `` == return to previous cursor position.
-noremap <leader>cc :s/^/\/\//<cr>``<right><right>
-noremap <leader>ch :s/^/#/<cr>``<right>
-noremap <leader>cv :s/^/"/<cr>``<right>
+noremap <leader>cc :s/^/\/\//<cr>:let @/=""<cr>``<right><right>
+noremap <leader>ch :s/^/#/<cr>:let @/=""<cr>``<right>
+noremap <leader>cv :s/^/"/<cr>:let @/=""<cr>``<right>
 
 " Remove comment from the current line.
-noremap <leader>crc :s/^\/\//<cr>``
-noremap <leader>crh: s/^#//<cr>``
-noremap <leader>crv :s/^"//<cr>``
+noremap <leader>crc :s/^\/\//<cr>``:let @/=""<cr>
+noremap <leader>crh: s/^#//<cr>``:let @/=""<cr>
+noremap <leader>crv :s/^"//<cr>``:let @/=""<cr>
 
 " Visual mode shortcuts
 " Comment a selected block of text
 " Also, try ctrl-v j,j,j, I <text to insert> <esc>
 "'<,'> is the selection range, this is added automatically to the beginning of the ex command.
-vnoremap <leader>cb :s/^//*\/\//<cr>
-vnoremap <leader>cc :s/^/\/\//<cr>
-vnoremap <leader>ch :s/^/#/<cr>
-vnoremap <leader>cv :s/^/"/<cr>
+vnoremap <leader>cb :s/^//*\/\//<cr>:let @/=""<cr>
+vnoremap <leader>cc <cr>:s/^/\/\/ha/<cr>:let @/=""<cr>
+vnoremap <leader>ch :s/^/#/<cr>:let @/=""<cr>
+vnoremap <leader>cv :s/^/"/<cr>:let @/=""<cr>
 
 " Remove comments.
 "'<,'> is the selection range, this is added automatically to the beginning of the ex command.
-vnoremap <leader>crb :s/^/\/\//<cr>
-vnoremap <leader>crc :s/^\/\//<cr>
-vnoremap <leader>crh :s/^#//<cr>
-vnoremap <leader>crv :s/^"//<cr>
+vnoremap <leader>crb :s/^/\/\//<cr>:let @/=""<cr>
+vnoremap <leader>crc :s/^\/\//<cr>:let @/=""<cr>
+vnoremap <leader>crh :s/^#//<cr>:let @/=""<cr>
+vnoremap <leader>crv :s/^"//<cr>:let @/=""<cr>
 
 " Move selections around.
 " TODO
+vnoremap <leader>j  "zdjPV
+vnoremap <leader>k  "zdkPV
+
 
 " Insert blocks of static text:
 "function! Insert(type)
@@ -111,12 +127,13 @@ vnoremap <leader>crv :s/^"//<cr>
 "    r ~/.vim/snippets/a:type
 "    r ~/.vim/snippets/twitter-modal
 "endfunction
-"nnoremap <leader>mm :call Insert('twitter-modal')<cr>
 
 nnoremap <leader>mchp :r ~/.vim/snippets/class-header.php<cr>
 nnoremap <leader>mmhp :r ~/.vim/snippets/function-header.php<cr>
 nnoremap <leader>mfhp :r ~/.vim/snippets/function-header.php<cr>
-nnoremap <leader>mhh :r ~/.vim/snippets/html.html<cr>
+nnoremap <leader>mhh  :r ~/.vim/snippets/html.html<cr>
+
+" Language specific mappings "
 " let maplocalleader="]"
 " map <localleader>
 
@@ -151,7 +168,12 @@ nnoremap <leader>mhh :r ~/.vim/snippets/html.html<cr>
 if filereadable("/etc/vim/vimrc.local")
   source /etc/vim/vimrc.local
 endif
+
+" Set up default options
 set nopaste
+set ai
+set statusline=%F%m%r%h%w\ (%L\ lines\|\r=%04l,c=%04v)\ asc=\%03.3b\ hex=\%02.2B
+set laststatus=2
 
 "Add a splash messages to output on loading vim
 "echo '>^.^<'
