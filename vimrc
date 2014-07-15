@@ -23,11 +23,32 @@ if has("syntax")
 endif
 
 " Set tabs and shiftwidths
-set rs term=builtin_ansi ai et smarttab ts=4 shiftwidth=4
+set rs term=xterm ai et smarttab ts=4 shiftwidth=4
 
 " Set keymappings here:
-noremap d; d/;<CR>
+nnoremap ' `
 cnoremap w!! w !sudo tee >/dev/null %
+
+" For Emacs-style editing on the command-line: >
+	" start of line
+	cnoremap <C-A>		<Home>
+	" back one character
+	cnoremap <C-B>		<Left>
+	" delete character under cursor
+	cnoremap <C-D>		<Del>
+	" end of line
+	cnoremap <C-E>		<End>
+	" forward one character
+	cnoremap <C-F>		<Right>
+	" recall newer command-line
+	cnoremap <C-N>		<Down>
+	" recall previous (older) command-line
+	cnoremap <C-P>		<Up>
+	" back one word
+	cnoremap <Esc><C-B>	<S-Left>
+	" forward one word
+	cnoremap <Esc><C-F>	<S-Right>
+" NOTE: This requires that the '<' flag is excluded from 'cpoptions'. |<>|
 
 " Make space more useful
 noremap <space> ve
@@ -72,7 +93,7 @@ nnoremap <leader>p "1p
 nnoremap <leader>P "1p
 
 " New-line, stay in normal mode
-nnoremap <cr> i<cr><esc>l
+nnoremap <cr> mzI<cr><esc>'zj
 
 " Move letters around.
 nnoremap <leader>l "zdlp
@@ -86,6 +107,9 @@ nnoremap <leader>z "zyl/<C-R>z<cr>
 
 "Get rid of highlighting
 nnoremap <leader>nh :nohl<cr>
+
+"Set syntax highlighting
+nnoremap <leader>php :set syntax=php<cr>
 
 " Comment the current line.
 " `` == return to previous cursor position.
@@ -113,6 +137,11 @@ vnoremap <leader>crb :s/^/\/\//<cr>:let @/=""<cr>
 vnoremap <leader>crc :s/^\/\//<cr>:let @/=""<cr>
 vnoremap <leader>crh :s/^#//<cr>:let @/=""<cr>
 vnoremap <leader>crv :s/^"//<cr>:let @/=""<cr>
+
+" Edit in hex mode
+nnoremap <leader>hex :%!xxd<cr>
+nnoremap <leader>nhex :%!xxd -r<cr>
+" Remove hex mode
 
 " Move selections around.
 " TODO
@@ -174,6 +203,7 @@ set nopaste
 set ai
 set statusline=%F%m%r%h%w\ (%L\ lines\|\r=%04l,c=%04v)\ asc=\%03.3b\ hex=\%02.2B
 set laststatus=2
+
 
 "Add a splash messages to output on loading vim
 "echo '>^.^<'
