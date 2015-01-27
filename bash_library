@@ -2,6 +2,15 @@
 
  # BASH comparison operators: http://tldp.org/LDP/abs/html/comparison-ops.html
 
+    # mv files and create directories if needed
+    function mvp ()
+    {
+        for last; do true; done
+            if [[ ! -e $last ]]; then
+                mkdir -p $last
+                    fi
+                    mv $@
+    }
     # Swap two files.
     function swap()         
     {
@@ -199,6 +208,9 @@
             echo -n "$i "
         done
         echo
+    }
+    function vsgrep {
+       vim -O $(oneline $(grep -lrs --exclude="*.svn*\|^\.\/temp\|^\.\/data\|^\.\/\.git" "$@" . | grep -v "^Binary file\|*\.swp$"))
     }
     
     function whocount {

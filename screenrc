@@ -20,7 +20,7 @@ hardstatus string '%{= kW}%-Lw%{= bW}%n %t%{= kW}%+Lw%< %{= kr}%-=%D %d %M %Y %c
 # SCREEN meta (command) character.
 #
 # CTRL-A -- This is the default.
-# I don't use this because ctrl-A is used to jump to the beginning of a line in BASH.
+# I don't use this because ctrl-A is used to jump to the beginning of a line in BASH (readline).
 # escape "^Aa"
 #
 # CTRL-O
@@ -41,11 +41,11 @@ bind ' ' windowlist -b
 shelltitle "Code"
 
 # Setup default windows.
-screen -t "Code"
-screen -t "DB"
-screen -t "PHP LOG" tail -f $PHP_LOG
-screen -t "APACHE LOG" tail -f $APACHE_LOG
+# screen -t "Code"
+source $HOME/.screen_windows
 #screen -t "Mail" mutt
 
 # Select window 0
 select 0
+
+nonblock 5

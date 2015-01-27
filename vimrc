@@ -1,3 +1,8 @@
+""""""""""""""""""""""""""""""""""
+"                                "
+"            General             "
+"                                "
+"""""""""""""""""""""""""""""""""" 
 " All system-wide defaults are set in $VIMRUNTIME/debian.vim (usually just
 " /usr/share/vim/vimcurrent/debian.vim) and sourced by the call to :runtime
 " you can find below.  If you wish to change any of those settings, you should
@@ -9,7 +14,17 @@
 " This line should not be removed as it ensures that various options are
 " properly set to work with the Vim-related packages available in Debian.
 runtime! debian.vim
+	" delete character under cursor
 "
+
+" Source a global configuration file if available
+if filereadable("/etc/vim/vimrc.local")
+  source /etc/vim/vimrc.local
+endif
+
+if has("syntax")
+  syntax on
+endif
 "
 " Uncomment the next line to make Vim more Vi-compatible
 " NOTE: debian.vim sets 'nocompatible'.  Setting 'compatible' changes numerous
@@ -18,24 +33,63 @@ runtime! debian.vim
 
 " Vim5 and later versions support syntax highlighting. Uncommenting the
 " following enables syntax highlighting by default.
-if has("syntax")
-  syntax on
-endif
+
+""""""""""""""""""""""""""""""""""
+"                                "
+"            UI Stuff            "
+"                                "
+"""""""""""""""""""""""""""""""""" 
+
+" General options
+set term=xterm
+set nopaste
+set showmatch  " Show matching brackets.
+set incsearch  " Incremental search, ie go to search term as you type it.
 
 " Set tabs and shiftwidths
-set rs term=xterm ai et smarttab ts=4 shiftwidth=4
+set rs          " What does rs do?
+set autoindent
+set expandtab   " Uses spaces instead of tabs.
+set smarttab
+set shiftwidth=4  " # of spaces used for auto indent
+set tabstop=4     " 1 tab = 4 spaces
 
-" Set keymappings here:
+" No annoying sound on errors
+set noerrorbells
+set novisualbell
+" set t_vb=
+" set tm=500
+
+" Colors
+set background=dark
+colorscheme elflord
+" colorscheme delek
+" colorscheme elflord
+" colorscheme zellner
+" colorscheme slate
+" colorscheme torte
+
+" Status Line
+set statusline=%F%m%r%h%w\ %{HasPaste()}[%04l\/%L\|%03v]\ ASC=\%03.3b\ HEX=\%02.2B
+set laststatus=2
+
+"Add a splash messages to output on loading vim
+"echo '>^.^<'
+
+
+""""""""""""""""""""""""""""""""""
+"                                "
+"          Keymappings           "
+"                                "
+"""""""""""""""""""""""""""""""""" 
 nnoremap ' `
-cnoremap w!! w !sudo tee >/dev/null %
+cnoremap w!! w !sudo tee >/dev/null % " What does this do?
 
 " For Emacs-style editing on the command-line: >
 	" start of line
 	cnoremap <C-A>		<Home>
 	" back one character
 	cnoremap <C-B>		<Left>
-	" delete character under cursor
-	cnoremap <C-D>		<Del>
 	" end of line
 	cnoremap <C-E>		<End>
 	" forward one character
@@ -50,25 +104,19 @@ cnoremap w!! w !sudo tee >/dev/null %
 	cnoremap <Esc><C-F>	<S-Right>
 " NOTE: This requires that the '<' flag is excluded from 'cpoptions'. |<>|
 
-" Make space more useful
-noremap <space> ve
+" Delete a line
+nnoremap <space> dd
+vnoremap <space> d
+
+"
+nnoremap <BS> kJ
 
 " Move lines up and down
-noremap - ddp
-noremap _ ddkP
+nnoremap - ddp
+nnoremap _ ddkP
 
-" More escape options
-inoremap asdf <Esc>
-
+" Set Mapleader
 let mapleader = ";"
-nnoremap <leader><leader> <Esc>
-nnoremap <leader>tw ve~h 
-nnoremap <leader>[ mvwbi[<Esc>ea]<Esc>`vl
-nnoremap <leader>( mvwbi(<Esc>ea)<Esc>`vl
-nnoremap <leader>' mvwbi'<Esc>ea'<Esc>`vl
-nnoremap <leader>" mvwbi"<Esc>ea"<Esc>`vl
-
-" TEST ON ME 'blah' blah '('blah') "blachblah" blahb '
 
 " Edit and source vimrc file quickly
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
@@ -86,19 +134,38 @@ nnoremap <leader>bb :bn<cr>
 nnoremap <leader>bl :ls<cr>
 nnoremap <leader>ba :ball<cr>
 
+" Add quotes, brackets around current word.
+nnoremap <leader>[ mvwbi[<Esc>ea]<Esc>`vl
+nnoremap <leader>( mvwbi(<Esc>ea)<Esc>`vl
+nnoremap <leader>' mvwbi'<Esc>ea'<Esc>`vl
+nnoremap <leader>" mvwbi"<Esc>ea"<Esc>`vl
+
+" Uppercase, lowercase current word.
+nnoremap <leader>U mvbveUh`v
+nnoremap <leader>u mvbveuh`v
+
+" Move to first non-empty character
+nnoremap <leader>4 g_
+nnoremap <leader>0 _g
+
+" TEST ON ME 'blah' blah '('blah') "blachblah" blahb '
+
+" window manipulation
+nnoremap <leader>i 
+nnoremap <leader>a 
+nnoremap <leader>f _\|
 " No-buffer yank
-nnoremap <leader>y "1y
+nnoremap <leader>y "1y   
 nnoremap <leader>Y "1Y
 nnoremap <leader>p "1p
 nnoremap <leader>P "1p
 
-" New-line, stay in normal mode
+" New line, stay in normal mode
 nnoremap <cr> mzI<cr><esc>'zj
 
 " Move letters around.
 nnoremap <leader>l "zdlp
 nnoremap <leader>h "zdhph
-nnoremap <leader>t "zdlph
 nnoremap <leader>k "zdlkP
 nnoremap <leader>j "zdljP
 
@@ -126,28 +193,40 @@ noremap <leader>crv :s/^"//<cr>``:let @/=""<cr>
 " Comment a selected block of text
 " Also, try ctrl-v j,j,j, I <text to insert> <esc>
 "'<,'> is the selection range, this is added automatically to the beginning of the ex command.
-vnoremap <leader>cb :s/^//*\/\//<cr>:let @/=""<cr>
-vnoremap <leader>cc <cr>:s/^/\/\/ha/<cr>:let @/=""<cr>
-vnoremap <leader>ch :s/^/#/<cr>:let @/=""<cr>
-vnoremap <leader>cv :s/^/"/<cr>:let @/=""<cr>
+" vnoremap <leader>cb :s/^//*\/\//<cr>:let @/=""<cr>
+" vnoremap <leader>cc <cr>:s/^/\/\/ha/<cr>:let @/=""<cr>
+" vnoremap <leader>ch :s/^/#/<cr>:let @/=""<cr>
+" vnoremap <leader>cv :s/^/"/<cr>:let @/=""<cr>
 
 " Remove comments.
-"'<,'> is the selection range, this is added automatically to the beginning of the ex command.
-vnoremap <leader>crb :s/^/\/\//<cr>:let @/=""<cr>
-vnoremap <leader>crc :s/^\/\//<cr>:let @/=""<cr>
-vnoremap <leader>crh :s/^#//<cr>:let @/=""<cr>
-vnoremap <leader>crv :s/^"//<cr>:let @/=""<cr>
+" "'<,'> is the selection range, this is added automatically to the beginning of the ex command.
+" vnoremap <leader>crb :s/^/\/\//<cr>:let @/=""<cr>
+" vnoremap <leader>crc :s/^\/\//<cr>:let @/=""<cr>
+" vnoremap <leader>crh :s/^#//<cr>:let @/=""<cr>
+" vnoremap <leader>crv :s/^"//<cr>:let @/=""<cr>
 
 " Edit in hex mode
-nnoremap <leader>hex :%!xxd<cr>
-nnoremap <leader>nhex :%!xxd -r<cr>
+nnoremap <leader><leader>h :%!xxd<cr>
+
 " Remove hex mode
+nnoremap <leader><leader>nh :%!xxd -r<cr>
+
+" Toggle spellcheck
+noremap <leader><leader>s :setlocal spell!<cr>
+
+" Toggle paste
+noremap <leader><leader>p :setlocal paste!<cr>
+
+" Move to the top of the file
+nnoremap <leader><leader><space> gg
 
 " Move selections around.
 " TODO
-vnoremap <leader>j  "zdjPV
-vnoremap <leader>k  "zdkPV
+" vnoremap <leader>j  "zdjPV
+" vnoremap <leader>k  "zdkPV
 
+" Fun with buffers
+nnoremap <F5> :buffers<CR>:buffer 
 
 " Insert blocks of static text:
 "function! Insert(type)
@@ -157,18 +236,50 @@ vnoremap <leader>k  "zdkPV
 "    r ~/.vim/snippets/twitter-modal
 "endfunction
 
-nnoremap <leader>mchp :r ~/.vim/snippets/class-header.php<cr>
-nnoremap <leader>mmhp :r ~/.vim/snippets/function-header.php<cr>
-nnoremap <leader>mfhp :r ~/.vim/snippets/function-header.php<cr>
-nnoremap <leader>mhh  :r ~/.vim/snippets/html.html<cr>
+" nnoremap <leader>mchp :r ~/.vim/snippets/class-header.php<cr>
+" nnoremap <leader>mmhp :r ~/.vim/snippets/function-header.php<cr>
+" nnoremap <leader>mfhp :r ~/.vim/snippets/function-header.php<cr>
+" nnoremap <leader>mhh  :r ~/.vim/snippets/html.html<cr>
 
 " Language specific mappings "
 " let maplocalleader="]"
 " map <localleader>
 
-" If using a dark background within the editing area and syntax highlighting
-" turn on this option as well
-"set background=dark
+""""""""""""""""""""""""""""""""""
+"                                "
+"          Saved macros          "
+"                                "
+"""""""""""""""""""""""""""""""""" 
+" 
+" To save a macro you can do:
+" 
+"     From normal mode: q<bufferletter>
+"     enter whatever commands
+"     From normal mode: q
+"     open .vimrc
+"     "q<bufferletter> to insert the macro into your let @q = '...' line
+" 
+" Be careful of quotes, though. They would have to be escaped properly.
+" Takes line of sql results ending at the EOF, join them with a comma
+let @j='O(j$$GAm€kb,G$r)V?(J'
+let @q="'a,'bs/^\\([^s|].*\\)$/\"\\1\",/g"
+
+let @s="'<,'>s/|\(.*\)|/'%\1%\' OR script LIKE"
+
+
+
+""""""""""""""""""""""""""""""""""
+"                                "
+"         Vim functions          "
+"                                "
+"""""""""""""""""""""""""""""""""" 
+" Returns true if paste mode is enabled
+function! HasPaste()
+    if &paste
+        return ' [P] '
+    endif
+    return ''
+endfunction
 
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file
@@ -185,25 +296,13 @@ nnoremap <leader>mhh  :r ~/.vim/snippets/html.html<cr>
 " The following are commented out as they cause vim to behave a lot
 " differently from regular Vi. They are highly recommended though.
 "set showcmd		" Show (partial) command in status line.
-"set showmatch		" Show matching brackets.
 "set ignorecase		" Do case insensitive matching
 "set smartcase		" Do smart case matching
-"set incsearch		" Incremental search
 "set autowrite		" Automatically save before commands like :next and :make
-"set hidden             " Hide buffers when they are abandoned
+"set hidden         " Hide buffers when they are abandoned
 "set mouse=a		" Enable mouse usage (all modes)
 
-" Source a global configuration file if available
-if filereadable("/etc/vim/vimrc.local")
-  source /etc/vim/vimrc.local
-endif
 
-" Set up default options
-set nopaste
-set ai
-set statusline=%F%m%r%h%w\ (%L\ lines\|\r=%04l,c=%04v)\ asc=\%03.3b\ hex=\%02.2B
-set laststatus=2
-
-
-"Add a splash messages to output on loading vim
-"echo '>^.^<'
+"
+" associate *.less with css filetype
+au BufRead,BufNewFile *.less set syntax=css

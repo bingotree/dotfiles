@@ -6,12 +6,12 @@ WHITE="\[\033[00m\]"
 
 function parse_git_branch {
   ref=$(git-symbolic-ref HEAD 2> /dev/null) || return
-  echo "${ref#refs/heads/}"
+  echo "<${ref#refs/heads/}>"
 }
 
-# User specific environment and startup programs
+# User specific environment variables
 export PATH=$PATH:$HOME/bin
-export PS1="$RED\u@\h$WHITE:$BLUE\w$WHITE($GREEN\$(parse_git_branch)$WHITE) \$ "
+export PS1="$RED\u@\h$WHITE:$BLUE\w$GREEN\$(parse_git_branch)$WHITE$ "
 export SVN_EDITOR=vim
 export CVSEDITOR=vim
 

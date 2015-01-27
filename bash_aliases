@@ -13,7 +13,7 @@ alias mr="ls -1t | head -1"
 alias rgrep='grep --color=always -rs -n --exclude="*.svn*"'
 alias rgrepi='grep -i --color=always -rs -n --exclude="*.svn*"'
 alias ngrep='grep -n '
-alias rfgrep='grep -lrs --exclude="*.svn*" --exclude="^\.\/temp" --exclude="^\.\/data"'
+alias rfgrep='grep -lrs --exclude="*.svn*" --exclude="^\.\/temp" --exclude="^\.\/data" --exclude="^\.\/\.git"'
 alias svnm='svn status | grep "^M"'
 alias svns='svn status | grep "^[^?]"'
 alias md='mkdir'
