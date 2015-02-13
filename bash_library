@@ -2,14 +2,18 @@
 
  # BASH comparison operators: http://tldp.org/LDP/abs/html/comparison-ops.html
 
-    # mv files and create directories if needed
+    function parse_git_branch {
+      ref=$(git-symbolic-ref HEAD 2> /dev/null) || return
+      echo "${ref#refs/heads/}"
+    }
+    # mv files and create intermediate directories if needed
     function mvp ()
     {
         for last; do true; done
             if [[ ! -e $last ]]; then
                 mkdir -p $last
-                    fi
-                    mv $@
+            fi
+            mv $@
     }
     # Swap two files.
     function swap()         

@@ -13,7 +13,7 @@
 
 " This line should not be removed as it ensures that various options are
 " properly set to work with the Vim-related packages available in Debian.
-runtime! debian.vim
+"runtime! debian.vim
 	" delete character under cursor
 "
 
@@ -22,9 +22,6 @@ if filereadable("/etc/vim/vimrc.local")
   source /etc/vim/vimrc.local
 endif
 
-if has("syntax")
-  syntax on
-endif
 "
 " Uncomment the next line to make Vim more Vi-compatible
 " NOTE: debian.vim sets 'nocompatible'.  Setting 'compatible' changes numerous
@@ -50,11 +47,11 @@ set incsearch  " Incremental search, ie go to search term as you type it.
 set rs          " What does rs do?
 set autoindent
 set expandtab   " Uses spaces instead of tabs.
-set smarttab
+set smarttab    " Delete 'space' tabs with one backspace
 set shiftwidth=4  " # of spaces used for auto indent
 set tabstop=4     " 1 tab = 4 spaces
 
-" No annoying sound on errors
+" No annoying sound/flash on errors
 set noerrorbells
 set novisualbell
 " set t_vb=

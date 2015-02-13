@@ -5,9 +5,6 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-if [ -f ~/.bash_profile ]; then
-    . ~/.bash_profile
-fi
 # SSH AGENT
 SSH_ENV="$HOME/.ssh/environment"
 
@@ -30,4 +27,29 @@ if [ -f "${SSH_ENV}" ]; then
     }
 else
     start_agent;
+fi
+
+# User specific aliases
+if [ -f ~/.bash_aliases ]; then 
+    . ~/.bash_aliases 
+fi
+
+# System specific aliases
+if [ -f ~/.bash_system_aliases ]; then 
+    . ~/.bash_system_aliases 
+fi
+
+# User specific functions
+if [ -f ~/.bash_library ]; then
+    . ~/.bash_library
+fi
+
+# System specific functions
+if [ -f ~/.bash_system_library ]; then
+    . ~/.bash_system_library
+fi
+
+# System specific splash screen
+if [ ${TERM} != "dumb" ]; then
+ test -s ~/.bash_splash && . ~/.bash_splash
 fi
