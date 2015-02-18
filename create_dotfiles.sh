@@ -10,7 +10,7 @@ archive=~/dotarchive
 mkdir -p $archive
 
 # Make sure you have the revisioned copy of the file in $dest
-files="bashrc vimrc screenrc bash_aliases bash_profile bash_library"
+files="bashrc bashrc.d vimrc screenrc bash_profile tmux.conf"
 for file in $files; do
     if [ -d ~/.$file ]; then
         echo "Creating directory .$file in $archive";

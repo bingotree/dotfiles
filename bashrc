@@ -29,27 +29,7 @@ else
     start_agent;
 fi
 
-# User specific aliases
-if [ -f ~/.bash_aliases ]; then 
-    . ~/.bash_aliases 
-fi
-
-# System specific aliases
-if [ -f ~/.bash_system_aliases ]; then 
-    . ~/.bash_system_aliases 
-fi
-
-# User specific functions
-if [ -f ~/.bash_library ]; then
-    . ~/.bash_library
-fi
-
-# System specific functions
-if [ -f ~/.bash_system_library ]; then
-    . ~/.bash_system_library
-fi
-
-# System specific splash screen
-if [ ${TERM} != "dumb" ]; then
- test -s ~/.bash_splash && . ~/.bash_splash
-fi
+# Load any supplementary scripts
+for config in "$HOME"/.bashrc.d/*.bash ; do
+    source "$config"
+done

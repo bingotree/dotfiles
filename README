@@ -3,3 +3,18 @@ Author: Brian Duncan
 
 Description: Maintain a versioned collection of configuration files a la Michael Smalley's technique:
 http://blog.smalleycreative.com/tutorials/using-git-and-github-to-manage-your-dotfiles/
+
+---- 
+
+2/17/2015 Updated bash configuration to use a directory, .bashrc.d/
+
+# Now aliases, functions, etc are saved as
+.bashrc.d/aliases.bash
+.bashrc.d/functions.bash
+
+# Anything with this format is sourced:
+.bashrc.d/*.bash
+
+I also added a .gitignore file with the following condition.
+files beginning with '_system' will be ignored.
+This way system-specific config may be set up using the same directory.

@@ -17,15 +17,15 @@ alias rfgrep='grep -lrs --exclude="*.svn*" --exclude="^\.\/temp" --exclude="^\.\
 alias svnm='svn status | grep "^M"'
 alias svns='svn status | grep "^[^?]"'
 alias md='mkdir'
-alias balias="cat ~/.bash_aliases; source ~/.bash_aliases"
-alias baliasedit="vi ~/.bash_aliases"
+alias balias="cat ~/.bashrc.d/aliases.bash; source ~/.bashrc.d/aliases.bash"
+alias baliasedit="vi ~/.bashrc.d/aliases.bash"
 alias sd="DS=`pwd`"
 alias sdd="DSS=`pwd`"
 alias ds="cd $DS"
 alias dss="cd $DSS"
 alias vlci="vlc -I ncurses"
 alias pathedit="vi ~/.bash_profile"
-alias serverlog="sudo tail -f /usr/local/zend/var/log/php.log"
+alias errlog="tail -f $PHP_LOG"
 alias swp='find . -name *.swp'
 alias diff='diff -u'
 alias vs='vi -O'
@@ -36,3 +36,4 @@ alias fd='find . -type d -name'
 alias fdi='find . -type d -iname'
 alias gitb='git branch -a'
 alias gitt='git status -uno'
+alias tmux='tmux -2u'
