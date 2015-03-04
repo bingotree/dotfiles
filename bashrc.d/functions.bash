@@ -138,9 +138,9 @@
     # Find a function.
     function ffunc() {
         if [ -z "$2" ]; then
-            rgrep "function\s*&\?\s*$1\s*(" .;
+            rgrep "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" .;
         else
-            rgrep "function\s*&\?\s*$1\s*(" $2;
+            rgrep "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" $2;
         fi
     }
     # Find a js function

@@ -10,6 +10,7 @@ else
 fi
 alias lt="ls -lt"
 alias mr="ls -1t | head -1"
+alias rc="source ~/.bashrc"
 alias rgrep='grep --color=always -rs -n --exclude="*.svn*"'
 alias rgrepi='grep -i --color=always -rs -n --exclude="*.svn*"'
 alias ngrep='grep -n '

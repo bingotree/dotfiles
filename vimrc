@@ -42,6 +42,7 @@ set term=xterm
 set nopaste
 set showmatch  " Show matching brackets.
 set incsearch  " Incremental search, ie go to search term as you type it.
+" set textwidth=80
 
 " Set tabs and shiftwidths
 set rs          " What does rs do?
@@ -201,6 +202,13 @@ noremap <leader>crv :s/^"//<cr>``:let @/=""<cr>
 " vnoremap <leader>crc :s/^\/\//<cr>:let @/=""<cr>
 " vnoremap <leader>crh :s/^#//<cr>:let @/=""<cr>
 " vnoremap <leader>crv :s/^"//<cr>:let @/=""<cr>
+
+" Search for text in visual mode
+vnoremap / y/<C-R>"
+
+" Select java-style comment blocks.
+vnoremap i* ?/\*<CR>vv/\*\/<CR>ll
+vnoremap a* <esc>0v/\/\*<CR>vv/\*\/<CR>ll
 
 " Edit in hex mode
 nnoremap <leader><leader>h :%!xxd<cr>
