@@ -1,18 +1,19 @@
 Public Repo: https://github.com/bingotree/dotfiles
 Author: Brian Duncan
+Summary:    Maintain a versioned collection of configuration files a la Michael Smalley's technique:
+            http://blog.smalleycreative.com/tutorials/using-git-and-github-to-manage-your-dotfiles/
 
-Description: Maintain a versioned collection of configuration files a la Michael Smalley's technique:
-http://blog.smalleycreative.com/tutorials/using-git-and-github-to-manage-your-dotfiles/
+Description:
+
+    This script takes a list of system configuration files or "dotfiles" (eg .bashrc, .vimrc) and 
+    generates a symlink to them in the users home directory. This allows environment variables 
+    and config files to be versioned without needing to make the home directory a git repository.
 
 ---- 
 
-Usage:
+Usage
 
 Source or execute this script:  ./create_dotfiles.sh
-This script takes a list of config files and generates a symlink to them in the 
-users home directory. This allows environment variables and config files to be 
-versioned without needing to make the home directory a git repository.
-
 This list of files to generate may be configured in the script itself, by editing the $files variable.
 
 2/17/2015 Updated bash configuration to use a directory, .bashrc.d/
