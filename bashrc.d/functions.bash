@@ -2,6 +2,9 @@
 
  # BASH comparison operators: http://tldp.org/LDP/abs/html/comparison-ops.html
 
+    function phpl {
+        php -l -ddisplay_errors=1 "$@"
+    }
     function parse_git_branch {
       ref=$(git-symbolic-ref HEAD 2> /dev/null) || return
       echo "${ref#refs/heads/}"
@@ -68,6 +71,11 @@
     # Use --no-prefix to get the patch -p0 friendly output.
     function gitd () { git diff $@ | colordiff; }
     function gitdl () { git diff $@ | colordiff | less -R; }
+    
+    # Returns modified diff files
+    function gitmod () { 
+        git status --porcelain | grep -r '^\s*M' | cut -f 3 -d' '
+    }
 
     # revert shortcut, prompts for file deletion, then updates.
     function gitrevert () { 
@@ -138,9 +146,9 @@
     # Find a function.
     function ffunc() {
         if [ -z "$2" ]; then
-            rgrep "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" .;
+            grepr "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" .;
         else
-            rgrep "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" $2;
+            grepr "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" $2;
         fi
     }
     # Find a js function
@@ -150,9 +158,9 @@
     # Find a class.
     function fclass() {
         if [ -z "$2" ]; then
-            rgrep "[cC]lass\s*$1" .;
+            grepr "[cC]lass\s*$1" .;
         else
-            rgrep "[cC]lass\s*$1" $2;
+            grepr "[cC]lass\s*$1" $2;
         fi
     }
 

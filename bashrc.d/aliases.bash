@@ -11,10 +11,10 @@ fi
 alias lt="ls -lt"
 alias mr="ls -1t | head -1"
 alias rc="source ~/.bashrc"
-alias rgrep='grep --color=always -rs -n --exclude="*.svn*"'
-alias rgrepi='grep -i --color=always -rs -n --exclude="*.svn*"'
-alias ngrep='grep -n '
-alias rfgrep='grep -lrs --exclude="*.svn*" --exclude="^\.\/temp" --exclude="^\.\/data" --exclude="^\.\/\.git"'
+alias grepr='grep --color=always -rs -n --exclude="*.svn*"'
+alias grepri='grep -i --color=always -rs -n --exclude="*.svn*"'
+alias grepn='grep -n '
+alias grepf='grep -lrs --exclude="*.svn*" --exclude="^\.\/temp" --exclude="^\.\/data" --exclude="^\.\/\.git"'
 alias svnm='svn status | grep "^M"'
 alias svns='svn status | grep "^[^?]"'
 alias md='mkdir'
