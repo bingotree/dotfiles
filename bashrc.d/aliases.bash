@@ -1,5 +1,5 @@
 ls --color &> /dev/null
-if [ $? ]; then
+if [ $? -eq 0 ]; then
     alias la='ls -laF --color=auto'
     alias ll='ls -lF --color=auto'
     alias ls='ls -F --color=auto'
