@@ -32,7 +32,7 @@ WHITE="\[\033[1;37m\]"
 # User specific environment variables
 export PATH=$PATH:$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash
 
-export PS1="$RED\u@\h$WHITE:$LBLUE\w$DGRAY<$YELLOW\$(parse_git_branch)$DGRAY>$WHITE$ "
+export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$DGRAY<$LGREEN\$(parse_git_branch)$DGRAY>$RED$ $WHITE"
 export SVN_EDITOR=vim
 export CVSEDITOR=vim
 export VISUAL=vim
