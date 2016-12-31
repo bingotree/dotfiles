@@ -38,3 +38,4 @@ alias fdi='find . -type d -iname'
 alias gitb='git branch -a'
 alias gitt='git status -uno'
 alias tmux='tmux -2u'
+alias www="cd $WWW"
