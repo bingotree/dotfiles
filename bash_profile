@@ -34,10 +34,10 @@ export PATH="$PATH:$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash
 
 # Prompt
 type parse_git_branch &> /dev/null
-if [ $? ]; then
-    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$RED$ $WHITE"
-else
+if [ $? -eq "0" ]; then
     export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$DGRAY<$LGREEN\$(parse_git_branch)$DGRAY>$RED$ $WHITE"
+else
+    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$RED$ $WHITE"
 fi
 
 export SVN_EDITOR=vim
