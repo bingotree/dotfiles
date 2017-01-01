@@ -30,9 +30,16 @@ WHITE="\[\033[1;37m\]"
 
 
 # User specific environment variables
-export PATH=$PATH:$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash
+export PATH="$PATH:$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash/:usr/local/share/npm/bin:/opt/local/bin:/opt/local/sbin"
 
-export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$DGRAY<$LGREEN\$(parse_git_branch)$DGRAY>$RED$ $WHITE"
+# Prompt
+type parse_git_branch &> /dev/null
+if [ $? ]; then
+    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$RED$ $WHITE"
+else
+    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$DGRAY<$LGREEN\$(parse_git_branch)$DGRAY>$RED$ $WHITE"
+fi
+
 export SVN_EDITOR=vim
 export CVSEDITOR=vim
 export VISUAL=vim

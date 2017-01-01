@@ -1,9 +1,9 @@
 # .bashrc
 
 # Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-fi
+#if [ -f /etc/bashrc ]; then
+#	. /etc/bashrc
+#fi
 
 # SSH AGENT
 SSH_ENV="$HOME/.ssh/environment"

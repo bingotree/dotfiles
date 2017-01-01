@@ -39,11 +39,11 @@ endif
 
 " General options
 syntax on
-
 set term=xterm
 set nopaste
 set showmatch  " Show matching brackets.
 set incsearch  " Incremental search, ie go to search term as you type it.
+set hlsearch   " Highlight search results.
 " set textwidth=80
 
 " Set tabs and shiftwidths
