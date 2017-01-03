@@ -162,15 +162,14 @@
 
     # Kill a job with a given number.
     # You can also just use kill %<number>.
-    # Dependencies: is_int
     function killjob () {
         output='Job(s) killed: ';
         jobs_killed='';
         for var in "$@"
         do
-            if [ $(is_int $var) -eq "1" ]
+            if [ "$var" -gt "0" ]
             then
-                if  kill %$var 
+                if kill %$var 
                 then
                     fg $var > /dev/null
                     jobs_killed="$jobs_killed $var";

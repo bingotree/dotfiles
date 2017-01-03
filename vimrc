@@ -318,6 +318,21 @@ autocmd BufRead,BufNewFile *.less set syntax=css
 autocmd BufRead,BufNewFile *.json set syntax=javascript
 autocmd BufRead,BufNewFile *.html set syntax=php
 
-"autocmd! BufWritePost $HOME/**/*.json !jsonlint <afile> 1>/dev/null
-autocmd! BufWritePost *.php :call RunPhplint()
+" Pathogen
+execute pathogen#infect()
 
+" Syntastic -- Linter and Syntax Checker
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+" Config
+let g:syntastic_check_on_open = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_wq = 1
+
+" Syntastic Checkers
+let g:syntastic_php_checkers = ["php", "phpcs", "phpmd"]
+let g:syntastic_javascript_checkers = ["jshint"]
+let g:syntastic_json_checkers = ["jsonlint"]
