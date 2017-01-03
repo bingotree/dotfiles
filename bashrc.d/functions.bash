@@ -138,9 +138,9 @@
     # Find a function.
     function ffunc() {
         if [ -z "$2" ]; then
-            rgrep "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" .;
+            grepr "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" .;
         else
-            rgrep "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" $2;
+            grepr "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(" $2;
         fi
     }
     # Find a js function
@@ -150,9 +150,9 @@
     # Find a class.
     function fclass() {
         if [ -z "$2" ]; then
-            rgrep "[cC]lass\s*$1" .;
+            grepr "[cC]lass\s*$1" .;
         else
-            rgrep "[cC]lass\s*$1" $2;
+            grepr "[cC]lass\s*$1" $2;
         fi
     }
 

@@ -11,10 +11,10 @@ fi
 alias lt="ls -lt"
 alias mr="ls -1t | head -1"
 alias rc="source ~/.bashrc"
-alias rgrep='grep --color=always -rs -n --exclude="*.svn*"'
-alias rgrepi='grep -i --color=always -rs -n --exclude="*.svn*"'
-alias ngrep='grep -n '
-alias rfgrep='grep -lrs --exclude="*.svn*" --exclude="^\.\/temp" --exclude="^\.\/data" --exclude="^\.\/\.git"'
+alias grepr='grep --color=always -rs -n --exclude="*.svn*"'
+alias grepri='grep -i --color=always -rs -n --exclude="*.svn*"'
+alias grepn='grep -n '
+alias grepf='grep -lrs --exclude="*.svn*" --exclude="^\.\/temp" --exclude="^\.\/data" --exclude="^\.\/\.git"'
 alias svnm='svn status | grep "^M"'
 alias svns='svn status | grep "^[^?]"'
 alias md='mkdir'
@@ -36,5 +36,7 @@ alias ffi='find . -type f -iname'
 alias fd='find . -type d -name'
 alias fdi='find . -type d -iname'
 alias gitb='git branch -a'
+alias gitbr=" git for-each-ref --sort=-committerdate refs/heads/ | head -10 | awk '{print $3}' "
 alias gitt='git status -uno'
 alias tmux='tmux -2u'
+alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"

@@ -33,3 +33,6 @@ fi
 for config in "$HOME"/.bashrc.d/*.bash ; do
     source "$config"
 done
+
+# Turn off flow control in order to use forward searching in readline
+stty -ixon
