@@ -2,9 +2,8 @@
 
  # BASH comparison operators: http://tldp.org/LDP/abs/html/comparison-ops.html
 
-    function parse_git_branch {
-      ref=$(git-symbolic-ref HEAD 2> /dev/null) || return
-      echo "${ref#refs/heads/}"
+    function phpl {
+        php -l -ddisplay_errors=1 "$@"
     }
     # mv files and create intermediate directories if needed
     function mvp ()
@@ -68,6 +67,11 @@
     # Use --no-prefix to get the patch -p0 friendly output.
     function gitd () { git diff $@ | colordiff; }
     function gitdl () { git diff $@ | colordiff | less -R; }
+    
+    # Returns modified diff files
+    function gitmod () { 
+        git status --porcelain | grep -r '^\s*M' | cut -f 3 -d' '
+    }
 
     # revert shortcut, prompts for file deletion, then updates.
     function gitrevert () { 
@@ -158,15 +162,14 @@
 
     # Kill a job with a given number.
     # You can also just use kill %<number>.
-    # Dependencies: is_int
     function killjob () {
         output='Job(s) killed: ';
         jobs_killed='';
         for var in "$@"
         do
-            if [ $(is_int $var) -eq "1" ]
+            if [ "$var" -gt "0" ]
             then
-                if  kill %$var 
+                if kill %$var 
                 then
                     fg $var > /dev/null
                     jobs_killed="$jobs_killed $var";

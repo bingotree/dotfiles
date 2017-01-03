@@ -38,10 +38,12 @@ endif
 """""""""""""""""""""""""""""""""" 
 
 " General options
+syntax on
 set term=xterm
 set nopaste
 set showmatch  " Show matching brackets.
 set incsearch  " Incremental search, ie go to search term as you type it.
+set hlsearch   " Highlight search results.
 " set textwidth=80
 
 " Set tabs and shiftwidths
@@ -102,19 +104,24 @@ cnoremap w!! w !sudo tee >/dev/null % " What does this do?
 	cnoremap <Esc><C-F>	<S-Right>
 " NOTE: This requires that the '<' flag is excluded from 'cpoptions'. |<>|
 
+" Set Mapleader
+let mapleader = ";"
+
 " Delete a line
 nnoremap <space> dd
 vnoremap <space> d
 
-"
-nnoremap <BS> kJ
+" Create new line with enter key, stay in normal mode.
+nnoremap <cr> mzI<cr><esc>`zj
+
+" Indent in normal mode
+nnoremap <leader><tab> V>
+nnoremap <leader><BS> V<
 
 " Move lines up and down
 nnoremap - ddp
 nnoremap _ ddkP
 
-" Set Mapleader
-let mapleader = ";"
 
 " Edit and source vimrc file quickly
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
@@ -152,14 +159,12 @@ nnoremap <leader>0 _g
 nnoremap <leader>i 
 nnoremap <leader>a 
 nnoremap <leader>f _\|
-" No-buffer yank
-nnoremap <leader>y "1y   
-nnoremap <leader>Y "1Y
-nnoremap <leader>p "1p
-nnoremap <leader>P "1p
 
-" New line, stay in normal mode
-nnoremap <cr> mzI<cr><esc>'zj
+" 'No-buffer' yank
+noremap <leader>y "1y   
+noremap <leader>Y "1Y
+noremap <leader>p "1p
+noremap <leader>P "1p
 
 " Move letters around.
 nnoremap <leader>l "zdlp
@@ -204,7 +209,7 @@ noremap <leader>crv :s/^"//<cr>``:let @/=""<cr>
 " vnoremap <leader>crv :s/^"//<cr>:let @/=""<cr>
 
 " Search for text in visual mode
-vnoremap / y/<C-R>"
+" vnoremap / y/<C-R>"
 
 " Select java-style comment blocks.
 vnoremap i* ?/\*<CR>vv/\*\/<CR>ll
@@ -262,16 +267,15 @@ nnoremap <F5> :buffers<CR>:buffer
 "     enter whatever commands
 "     From normal mode: q
 "     open .vimrc
-"     "q<bufferletter> to insert the macro into your let @q = '...' line
+"     q"<bufferletter>p to insert the macro into your let @q = '...' line
 " 
 " Be careful of quotes, though. They would have to be escaped properly.
-" Takes line of sql results ending at the EOF, join them with a comma
-let @j='O(j$$GAm€kb,G$r)V?(J'
-let @q="'a,'bs/^\\([^s|].*\\)$/\"\\1\",/g"
 
-let @s="'<,'>s/|\(.*\)|/'%\1%\' OR script LIKE"
-
-
+" Takes line of sql results with delimiters |,  turns into csv
+let @j=":'a,'bs/^\\s*|\\?\\s*\\(\\w\\+\\)\\s*|\\?.*$/'\\1',/g"
+" Takes line of sql results with tab delimiters |, turns into csv 
+let @c=":%s/\\t/\",\"/g"
+let @s=":%s/^\\(.*\\)$/\"\\1\"/g"
 
 """"""""""""""""""""""""""""""""""
 "                                "
@@ -309,5 +313,26 @@ endfunction
 
 
 "
-" associate *.less with css filetype
-au BufRead,BufNewFile *.less set syntax=css
+" associate filetypes with syntax
+autocmd BufRead,BufNewFile *.less set syntax=css
+autocmd BufRead,BufNewFile *.json set syntax=javascript
+autocmd BufRead,BufNewFile *.html set syntax=php
+
+" Pathogen
+execute pathogen#infect()
+
+" Syntastic -- Linter and Syntax Checker
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+" Config
+let g:syntastic_check_on_open = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_wq = 1
+
+" Syntastic Checkers
+let g:syntastic_php_checkers = ["php", "phpcs", "phpmd"]
+let g:syntastic_javascript_checkers = ["jshint"]
+let g:syntastic_json_checkers = ["jsonlint"]
