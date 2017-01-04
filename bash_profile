@@ -19,8 +19,8 @@ LCYAN="\[\033[1;36m\]"
 RED="\[\033[0;31m\]"
 LRED="\[\033[1;31m\]"
 
-PURPLE="\[\033[0;35\]"
-LPURPLE="\[\033[1;35\]"
+PURPLE="\[\033[0;35m\]"
+LPURPLE="\[\033[1;35m\]"
 
 BROWN="\[\033[0;33m\]"
 YELLOW="\[\033[1;33m\]"
@@ -30,11 +30,21 @@ WHITE="\[\033[1;37m\]"
 
 
 # User specific environment variables
-export PATH=$PATH:$HOME/bin:$HOME/.bashrc.d/functions.bash
+export PATH="$PATH:$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash/:usr/local/share/npm/bin:/opt/local/bin:/opt/local/sbin"
 
-export PS1="$RED\u@\h$WHITE:$LBLUE\w$DGRAY<$YELLOW\$(parse_git_branch)$DGRAY>$WHITE$ "
+# Prompt
+type parse_git_branch &> /dev/null
+if [ $? -eq "0" ]; then
+    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$DGRAY<$LGREEN\$(parse_git_branch)$DGRAY>$RED$ $WHITE"
+else
+    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$RED$ $WHITE"
+fi
+
 export SVN_EDITOR=vim
 export CVSEDITOR=vim
+export VISUAL=vim
+export EDITOR="$VISUAL"
+export WWW="$HOME/www/sites"
 
 # Source bashrc
 if [ -f ~/.bashrc ]; then 

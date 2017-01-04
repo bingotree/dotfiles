@@ -1,12 +1,12 @@
 ls --color &> /dev/null
-if [ $? -eq 0 ]; then
-    alias la='ls -laF --color=auto'
-    alias ll='ls -lF --color=auto'
-    alias ls='ls -F --color=auto'
-else
+if [ $? ]; then
     alias la='ls -laFG'
     alias ll='ls -lFG'
     alias ls='ls -FG'
+else
+    alias la='ls -laF --color=auto'
+    alias ll='ls -lF --color=auto'
+    alias ls='ls -F --color=auto'
 fi
 alias lt="ls -lt"
 alias mr="ls -1t | head -1"
@@ -36,5 +36,8 @@ alias ffi='find . -type f -iname'
 alias fd='find . -type d -name'
 alias fdi='find . -type d -iname'
 alias gitb='git branch -a'
+alias gitbr=" git for-each-ref --sort=-committerdate refs/heads/ | head -10 | awk '{print $3}' "
 alias gitt='git status -uno'
 alias tmux='tmux -2u'
+alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
+alias www="cd $WWW"
