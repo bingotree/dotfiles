@@ -30,12 +30,12 @@ WHITE="\[\033[1;37m\]"
 
 
 # User specific environment variables
-export PATH="$PATH:$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash/:usr/local/share/npm/bin:/opt/local/bin:/opt/local/sbin"
+export PATH="$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash/:usr/local/share/npm/bin:/opt/local/bin:/opt/local/sbin:$PATH"
 
 # Prompt
-type parse_git_branch &> /dev/null
+type $HOME/bin/global-bin/parse_git_branch &> /dev/null
 if [ $? -eq "0" ]; then
-    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$DGRAY<$LGREEN\$(parse_git_branch)$DGRAY>$RED$ $WHITE"
+    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$DGRAY<$PURPLE\$($HOME/bin/global-bin/parse_git_branch)$DGRAY>$RED$ $WHITE"
 else
     export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$RED$ $WHITE"
 fi
