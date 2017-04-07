@@ -23,45 +23,46 @@
         mv $TMPFILE "$2"
     }
 
-    # CVS Functions
-    # Also check out cvstags in ~/bin for listing tags.
-    # Dependencies: colordiff, patch
-    export CVS_STASH=$HOME/.cvsstash.patch
-
-    # colorized, patchable diff.
-    function cvsd () { cvs diff -u $@ | colordiff; }
-    function cvsdl () { cvs diff -u $@ | colordiff | less -R; }
-
-    # revert shortcut, prompts for file deletion, then updates.
-    function cvsrevert () { rm -i $@ | cvs update $@; }
-
-    # Get patchable, colorized diff output between two revisions. 
-    function cvscompare () {  
-        if [ $# -lt 3 ]; then
-            echo "Usage: cvscompare <tag1> <tag2> <files or path>";
-            echo "Use cvstags -l to list all available tags.";
-            return 1;
-        fi
-        rev1=$1; 
-        rev2=$2; 
-        shift 2; 
-        cvs diff -N -c -u -r $rev1 -r $rev2 $@ | colordiff; 
-    }
-
-    function cvsstash () { cvsd $@ > $CVS_STASH; echo -e "\n\nCVS STASH\n\n"; cat $CVS_STASH; cvsrevert $@;}
-    function cvsunstash () { patch -p0 < $CVS_STASH; }
-    function cvslastdiff() { cvs diff -u -r $(cvs log $1 | grep ^revision | head -n 2 | tail -n 1 | cut -c 10-) -r $(cvs log $1 | grep ^revision | head -n 1 | cut -c 10-) $1 | colordiff; }
-
-
-    alias cvsr=cvsrevert
-    alias cvss=cvsstash
-    alias cvsu=cvsunstash
-    alias cvsc=cvscompare
-    alias cvsld=cvslastdiff
 
     # GIT Functions
     # Dependencies: colordiff, patch
     export GIT_STASH=$HOME/.gitstash.patch
+
+    # Checkout a branch from remote.
+    function gitco() {
+        if [ -z $1 ]
+        then
+            echo 'Usage: gitco <branch> ';
+        else
+            echo "git checkout -b $1 origin/$1"
+            git checkout -b $1 origin/$1
+        fi
+    }
+    # Checkout a feature branch from remote.
+    function gitcof() {
+        if [ -z $1 ]
+        then
+            echo 'Usage: gitco <feature-branch> ';
+        else
+            echo "git checkout -b feature/$1 origin/feature/$1"
+            git checkout -b feature/$1 origin/feature/$1
+        fi
+    }
+    function gitfresh() {
+        if [ -z $1 ]
+        then
+            echo 'Usage: gitfresh <branch> ';
+        else
+            echo -n "Delete $1 and check out a new copy, are you sure? (y/n): "
+            read ans
+            if [ "$ans" != "y" ]; then 
+                echo 'Aborting.'
+                return
+            fi
+            git branch -D $1 
+            git checkout -b $1 origin/$1
+        fi
+    }
 
     # colorized, patchable diff.
     # Use --no-prefix to get the patch -p0 friendly output.
@@ -231,3 +232,49 @@
     function error_gen {
         awfije;
     }
+    # DOCKER functions
+    function dockerbash() {
+        if [ -z $1 ]
+        then
+            echo 'Usage: dockerbash [containerID|containerName] ';
+        else
+            docker exec -i -t "$1" /bin/bash    
+        fi
+    }
+
+## Function archive
+    # CVS Functions --
+    # Also check out cvstags in ~/bin for listing tags.
+    # Dependencies: colordiff, patch
+    export CVS_STASH=$HOME/.cvsstash.patch
+
+    # colorized, patchable diff.
+    function cvsd () { cvs diff -u $@ | colordiff; }
+    function cvsdl () { cvs diff -u $@ | colordiff | less -R; }
+
+    # revert shortcut, prompts for file deletion, then updates.
+    function cvsrevert () { rm -i $@ | cvs update $@; }
+
+    # Get patchable, colorized diff output between two revisions. 
+    function cvscompare () {  
+        if [ $# -lt 3 ]; then
+            echo "Usage: cvscompare <tag1> <tag2> <files or path>";
+            echo "Use cvstags -l to list all available tags.";
+            return 1;
+        fi
+        rev1=$1; 
+        rev2=$2; 
+        shift 2; 
+        cvs diff -N -c -u -r $rev1 -r $rev2 $@ | colordiff; 
+    }
+
+    function cvsstash () { cvsd $@ > $CVS_STASH; echo -e "\n\nCVS STASH\n\n"; cat $CVS_STASH; cvsrevert $@;}
+    function cvsunstash () { patch -p0 < $CVS_STASH; }
+    function cvslastdiff() { cvs diff -u -r $(cvs log $1 | grep ^revision | head -n 2 | tail -n 1 | cut -c 10-) -r $(cvs log $1 | grep ^revision | head -n 1 | cut -c 10-) $1 | colordiff; }
+
+
+    alias cvsr=cvsrevert
+    alias cvss=cvsstash
+    alias cvsu=cvsunstash
+    alias cvsc=cvscompare
+    alias cvsld=cvslastdiff

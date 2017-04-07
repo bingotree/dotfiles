@@ -30,7 +30,7 @@ WHITE="\[\033[1;37m\]"
 
 
 # User specific environment variables
-export PATH="$PATH:$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash/:usr/local/share/npm/bin:/opt/local/bin:/opt/local/sbin"
+export PATH="$PATH:$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash/:usr/local/share/npm/bin:/opt/local/bin:/opt/local/sbin:$(npm bin)"
 
 # Prompt
 type parse_git_branch &> /dev/null

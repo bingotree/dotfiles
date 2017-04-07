@@ -107,12 +107,16 @@ cnoremap w!! w !sudo tee >/dev/null % " What does this do?
 " Set Mapleader
 let mapleader = ";"
 
+" Edit and source vimrc file quickly
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
 " Delete a line
 nnoremap <space> dd
 vnoremap <space> d
 
 " Create new line with enter key, stay in normal mode.
-nnoremap <cr> mzI<cr><esc>`zj
+nnoremap <leader><cr> mzI<cr><esc>`zj
 
 " Indent in normal mode
 nnoremap <leader><tab> V>
@@ -123,16 +127,12 @@ nnoremap - ddp
 nnoremap _ ddkP
 
 
-" Edit and source vimrc file quickly
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-
-" Save and exit short cuts.
+" Save and exit shortcuts.
 nnoremap <leader>w :w<cr>
 nnoremap <leader>x :x<cr>
 nnoremap <leader>q :q<cr>
 
-" Buffer short cuts
+" Buffer shortcuts
 nnoremap <leader>bv :bp<cr>
 nnoremap <leader>bn :bn<cr>
 nnoremap <leader>bb :bn<cr>
@@ -153,24 +153,12 @@ nnoremap <leader>u mvbveuh`v
 nnoremap <leader>4 g_
 nnoremap <leader>0 _g
 
-" TEST ON ME 'blah' blah '('blah') "blachblah" blahb '
-
 " window manipulation
-nnoremap <leader>i 
-nnoremap <leader>a 
 nnoremap <leader>f _\|
 
-" 'No-buffer' yank
-noremap <leader>y "1y   
-noremap <leader>Y "1Y
-noremap <leader>p "1p
-noremap <leader>P "1p
-
-" Move letters around.
+" Move letters left or right.
 nnoremap <leader>l "zdlp
 nnoremap <leader>h "zdhph
-nnoremap <leader>k "zdlkP
-nnoremap <leader>j "zdljP
 
 "Search for letter under cursor
 nnoremap <leader>z "zyl/<C-R>z<cr>
@@ -178,38 +166,11 @@ nnoremap <leader>z "zyl/<C-R>z<cr>
 "Get rid of highlighting
 nnoremap <leader>nh :nohl<cr>
 
-"Set syntax highlighting
+"Force syntax highlighting
 nnoremap <leader>php :set syntax=php<cr>
 
-" Comment the current line.
-" `` == return to previous cursor position.
-noremap <leader>cc :s/^/\/\//<cr>:let @/=""<cr>``<right><right>
-noremap <leader>ch :s/^/#/<cr>:let @/=""<cr>``<right>
-noremap <leader>cv :s/^/"/<cr>:let @/=""<cr>``<right>
-
-" Remove comment from the current line.
-noremap <leader>crc :s/^\/\//<cr>``:let @/=""<cr>
-noremap <leader>crh: s/^#//<cr>``:let @/=""<cr>
-noremap <leader>crv :s/^"//<cr>``:let @/=""<cr>
 
 " Visual mode shortcuts
-" Comment a selected block of text
-" Also, try ctrl-v j,j,j, I <text to insert> <esc>
-"'<,'> is the selection range, this is added automatically to the beginning of the ex command.
-" vnoremap <leader>cb :s/^//*\/\//<cr>:let @/=""<cr>
-" vnoremap <leader>cc <cr>:s/^/\/\/ha/<cr>:let @/=""<cr>
-" vnoremap <leader>ch :s/^/#/<cr>:let @/=""<cr>
-" vnoremap <leader>cv :s/^/"/<cr>:let @/=""<cr>
-
-" Remove comments.
-" "'<,'> is the selection range, this is added automatically to the beginning of the ex command.
-" vnoremap <leader>crb :s/^/\/\//<cr>:let @/=""<cr>
-" vnoremap <leader>crc :s/^\/\//<cr>:let @/=""<cr>
-" vnoremap <leader>crh :s/^#//<cr>:let @/=""<cr>
-" vnoremap <leader>crv :s/^"//<cr>:let @/=""<cr>
-
-" Search for text in visual mode
-" vnoremap / y/<C-R>"
 
 " Select java-style comment blocks.
 vnoremap i* ?/\*<CR>vv/\*\/<CR>ll
@@ -236,7 +197,7 @@ nnoremap <leader><leader><space> gg
 " vnoremap <leader>k  "zdkPV
 
 " Fun with buffers
-nnoremap <F5> :buffers<CR>:buffer 
+nnoremap <leader><F5> :buffers<CR>:buffer 
 
 " Insert blocks of static text:
 "function! Insert(type)
@@ -263,11 +224,13 @@ nnoremap <F5> :buffers<CR>:buffer
 " 
 " To save a macro you can do:
 " 
-"     From normal mode: q<bufferletter>
+"     From normal mode: q<register>
 "     enter whatever commands
 "     From normal mode: q
 "     open .vimrc
-"     q"<bufferletter>p to insert the macro into your let @q = '...' line
+"     "<register>p to insert the macro into your let @q = '...' line
+"     eg you record into register r ...
+"     let @q='< CONTENTS OF register r >'
 " 
 " Be careful of quotes, though. They would have to be escaped properly.
 
@@ -312,14 +275,40 @@ endfunction
 "set mouse=a		" Enable mouse usage (all modes)
 
 
-"
 " associate filetypes with syntax
 autocmd BufRead,BufNewFile *.less set syntax=css
 autocmd BufRead,BufNewFile *.json set syntax=javascript
 autocmd BufRead,BufNewFile *.html set syntax=php
+autocmd BufRead,BufNewFile *.js   set shiftwidth=2 tabstop=2
+autocmd BufRead,BufNewFile *.php   set shiftwidth=4 tabstop=4
 
+
+""""""""""""""""""""""""""""""""""
+"                                "
+"         Vim plugins            "
+"                                "
+"""""""""""""""""""""""""""""""""" 
 " Pathogen
 execute pathogen#infect()
+
+" Vdebug - Connects to xdebug
+"g:vdebug_options      
+"'watch_window_style': 'expanded',
+"'marker_default': '*',
+"'continuous_mode': 0,
+"'ide_key': 'VDEBUG',
+"'break_on_open': 1,
+"'on_close': 'detach',
+"'marker_closed_tree': '+',
+"'timeout': 20,
+let g:vdebug_options = {}
+let g:vdebug_options['port'] = 10000
+let g:vdebug_options['server'] = '10.254.254.254'
+let g:vdebug_options['debug_file'] = "~/vdebug.log"
+let g:vdebug_options['debug_file_level'] = 2
+let g:vdebug_options['ide_key'] = 'XDEBUG_ECLIPSE'
+" TODO use env variable for this.
+let g:vdebug_options["path_maps"] = {"/web": "/Users/brianduncan/dev"}
 
 " Syntastic -- Linter and Syntax Checker
 set statusline+=%#warningmsg#
@@ -334,5 +323,5 @@ let g:syntastic_check_on_wq = 1
 
 " Syntastic Checkers
 let g:syntastic_php_checkers = ["php", "phpcs", "phpmd"]
-let g:syntastic_javascript_checkers = ["jshint"]
+let g:syntastic_javascript_checkers = ["eslint"]
 let g:syntastic_json_checkers = ["jsonlint"]

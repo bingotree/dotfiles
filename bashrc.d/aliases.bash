@@ -20,6 +20,8 @@ alias svns='svn status | grep "^[^?]"'
 alias md='mkdir'
 alias balias="cat ~/.bashrc.d/aliases.bash; source ~/.bashrc.d/aliases.bash"
 alias baliasedit="vi ~/.bashrc.d/aliases.bash"
+alias bfunc="cat ~/.bashrc.d/functions.bash; source ~/.bashrc.d/functions.bash"
+alias bfuncedit="vi ~/.bashrc.d/functions.bash"
 alias sd="DS=`pwd`"
 alias sdd="DSS=`pwd`"
 alias ds="cd $DS"
@@ -41,3 +43,17 @@ alias gitt='git status -uno'
 alias tmux='tmux -2u'
 alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
 alias www="cd $WWW"
+alias filesize="du -sh" #disk usage
+alias npm-exec='PATH=$(npm bin):$PATH'
+
+# Docker.
+alias dockervm='docker-machine ls'
+alias dockerimages='docker images'
+alias dockercontainers='docker ps'
+alias dockerls='docker ps'
+alias dockerstart='docker run -d'
+alias dockerlogs='docker logs'
+alias dockerstop='docker stop'
+alias dockerbuild='docker build .'
+alias dockercompose='docker-compose up'
+alias dockerexec='docker exec -i -t ' # /bin/bash'
