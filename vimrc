@@ -322,6 +322,6 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_wq = 1
 
 " Syntastic Checkers
-let g:syntastic_php_checkers = ["php", "phpcs", "phpmd"]
-let g:syntastic_javascript_checkers = ["eslint"]
+let g:syntastic_php_checkers = ["php"]
+let g:syntastic_javascript_checkers = ["jshint"]
 let g:syntastic_json_checkers = ["jsonlint"]
