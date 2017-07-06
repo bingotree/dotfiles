@@ -163,6 +163,9 @@ nnoremap <leader>h "zdhph
 "Search for letter under cursor
 nnoremap <leader>z "zyl/<C-R>z<cr>
 
+"Search for entire highlighted stuff
+vnoremap <leader>z "zy/<C-R>z<cr>
+
 "Get rid of highlighting
 nnoremap <leader>nh :nohl<cr>
 
@@ -211,6 +214,9 @@ nnoremap <leader><F5> :buffers<CR>:buffer
 " nnoremap <leader>mmhp :r ~/.vim/snippets/function-header.php<cr>
 " nnoremap <leader>mfhp :r ~/.vim/snippets/function-header.php<cr>
 " nnoremap <leader>mhh  :r ~/.vim/snippets/html.html<cr>
+
+" emmet html example
+" type html:5<ctrl-y>,
 
 " Language specific mappings "
 " let maplocalleader="]"
@@ -311,17 +317,17 @@ let g:vdebug_options['ide_key'] = 'XDEBUG_ECLIPSE'
 let g:vdebug_options["path_maps"] = {"/web": "/Users/brianduncan/dev"}
 
 " Syntastic -- Linter and Syntax Checker
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-" Config
-let g:syntastic_check_on_open = 1
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_wq = 1
-
-" Syntastic Checkers
-let g:syntastic_php_checkers = ["php"]
-let g:syntastic_javascript_checkers = ["jshint"]
-let g:syntastic_json_checkers = ["jsonlint"]
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"
+"" Config
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_wq = 1
+"
+"" Syntastic Checkers
+"let g:syntastic_php_checkers = ["php"]
+let g:syntastic_javascript_checkers = ["eslint"]
+"let g:syntastic_json_checkers = ["jsonlint"]

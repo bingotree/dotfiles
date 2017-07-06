@@ -63,6 +63,21 @@
             git checkout -b $1 origin/$1
         fi
     }
+    function gitsteamroll() {
+        if [ -z $1 ]
+        then
+            echo 'Usage: gitsteamroll <branch> ';
+        else
+            echo -n "Delete $1 and fork a new $1 off the current branch, are you sure? (y/n): "
+            read ans
+            if [ "$ans" != "y" ]; then 
+                echo 'Aborting.'
+                return
+            fi
+            git branch -D $1 
+            git checkout -b $1
+        fi
+    }
 
     # colorized, patchable diff.
     # Use --no-prefix to get the patch -p0 friendly output.

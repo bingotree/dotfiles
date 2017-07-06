@@ -8,6 +8,7 @@ else
     alias ll='ls -lF --color=auto'
     alias ls='ls -F --color=auto'
 fi
+alias e="echo"
 alias lt="ls -lt"
 alias mr="ls -1t | head -1"
 alias rc="source ~/.bashrc"
