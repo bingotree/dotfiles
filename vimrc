@@ -53,6 +53,7 @@ set expandtab   " Uses spaces instead of tabs.
 set smarttab    " Delete 'space' tabs with one backspace
 set shiftwidth=4  " # of spaces used for auto indent
 set tabstop=4     " 1 tab = 4 spaces
+set backspace=indent,eol,start " backspace wasn't working in v8 on a mac.
 
 " No annoying sound/flash on errors
 set noerrorbells
@@ -286,7 +287,11 @@ autocmd BufRead,BufNewFile *.less set syntax=css
 autocmd BufRead,BufNewFile *.json set syntax=javascript
 autocmd BufRead,BufNewFile *.html set syntax=php
 autocmd BufRead,BufNewFile *.js   set shiftwidth=2 tabstop=2
+autocmd BufRead,BufNewFile *.yaml   set shiftwidth=2 tabstop=2
+autocmd BufRead,BufNewFile *.yml   set shiftwidth=2 tabstop=2
 autocmd BufRead,BufNewFile *.php   set shiftwidth=4 tabstop=4
+autocmd BufNewFile,BufRead *.asm set syntax=nasm filetype=nasm shiftwidth=4 tabstop=4
+autocmd BufRead,BufNewFile Makefile   set noexpandtab shiftwidth=4 tabstop=4
 
 
 """"""""""""""""""""""""""""""""""

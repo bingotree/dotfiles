@@ -256,6 +256,9 @@
             docker exec -i -t "$1" /bin/bash    
         fi
     }
+    function dockerkillall() {
+        docker ps | awk '{print $1}' | awk 'FNR > 1 {print}' | xargs docker kill
+    }
 
 ## Function archive
     # CVS Functions --
