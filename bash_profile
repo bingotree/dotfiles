@@ -35,9 +35,9 @@ export PATH="$PATH:$HOME/bin:$HOME/bin/global-bin:$HOME/.bashrc.d/functions.bash
 # Prompt
 type $HOME/bin/global-bin/parse_git_branch &> /dev/null
 if [ $? -eq "0" ]; then
-    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$DGRAY<$PURPLE\$($HOME/bin/global-bin/parse_git_branch)$DGRAY>$RED$ $WHITE"
+    export PS1="$BLUE\u$YELLOW☀ $LBLUE\h$WHITE:$LGREEN\w$DGRAY<$PURPLE\$($HOME/bin/global-bin/parse_git_branch)$DGRAY>$RED∫ $WHITE"
 else
-    export PS1="$BLUE\u@\h$WHITE:$LBLUE\w$RED$ $WHITE"
+    export PS1="$BLUE\u$YELLOW☀ $LBLUE\h$WHITE:$LBLUE\w$RED► $WHITE"
 fi
 
 export SVN_EDITOR=vim
@@ -45,6 +45,10 @@ export CVSEDITOR=vim
 export VISUAL=vim
 export EDITOR="$VISUAL"
 export WWW="$HOME/www/sites"
+
+if [ -f ~/.ssh/saveagent ]; then
+    . ~/.ssh/saveagent
+fi
 
 # Source bashrc
 if [ -f ~/.bashrc ]; then 

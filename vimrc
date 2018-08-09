@@ -290,6 +290,7 @@ autocmd BufRead,BufNewFile *.js   set shiftwidth=2 tabstop=2
 autocmd BufRead,BufNewFile *.yaml   set shiftwidth=2 tabstop=2
 autocmd BufRead,BufNewFile *.yml   set shiftwidth=2 tabstop=2
 autocmd BufRead,BufNewFile *.php   set shiftwidth=4 tabstop=4
+autocmd BufRead,BufNewFile *.py   set shiftwidth=4 tabstop=4
 autocmd BufNewFile,BufRead *.asm set syntax=nasm filetype=nasm shiftwidth=4 tabstop=4
 autocmd BufRead,BufNewFile Makefile   set noexpandtab shiftwidth=4 tabstop=4
 
@@ -302,37 +303,44 @@ autocmd BufRead,BufNewFile Makefile   set noexpandtab shiftwidth=4 tabstop=4
 " Pathogen
 execute pathogen#infect()
 
-" Vdebug - Connects to xdebug
-"g:vdebug_options      
-"'watch_window_style': 'expanded',
-"'marker_default': '*',
-"'continuous_mode': 0,
-"'ide_key': 'VDEBUG',
-"'break_on_open': 1,
-"'on_close': 'detach',
-"'marker_closed_tree': '+',
-"'timeout': 20,
-let g:vdebug_options = {}
-let g:vdebug_options['port'] = 10000
-let g:vdebug_options['server'] = '10.254.254.254'
-let g:vdebug_options['debug_file'] = "~/vdebug.log"
-let g:vdebug_options['debug_file_level'] = 2
-let g:vdebug_options['ide_key'] = 'XDEBUG_ECLIPSE'
-" TODO use env variable for this.
-let g:vdebug_options["path_maps"] = {"/web": "/Users/brianduncan/dev"}
-
 " Syntastic -- Linter and Syntax Checker
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"
-"" Config
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_wq = 1
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+" Config
+let g:syntastic_check_on_open = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_wq = 1
 "
 "" Syntastic Checkers
 "let g:syntastic_php_checkers = ["php"]
+let g:syntastic_python_checkers = ["pylint"]
 let g:syntastic_javascript_checkers = ["eslint"]
 "let g:syntastic_json_checkers = ["jsonlint"]
+
+" Copy yank buffer to system clipboard
+" Use OSC52 to put things into the system clipboard, works over SSH!
+function! Osc52Yank()
+  let buffer=system('base64 -w0', @0)
+  let buffer=substitute(buffer, "\n$", "", "")
+  let buffer='\e]52;c;'.buffer.'\x07'
+
+  " Need special escaping if within tmux
+  if $TMUX != ''
+    let buffer='\ePtmux;\e'.buffer.'\e\\'
+  endif
+
+  " Must output to /dev/tty, otherwise the escape codes don't make it out to the
+  " terminal
+  silent exe "!echo -ne ".shellescape(buffer)." > /dev/tty"
+endfunction
+
+" Copy yank register to system
+nnoremap <leader>y :call Osc52Yank()<cr><C-l>
+" Copy selection to system clipboard
+vnoremap <leader>y :<C-u>norm! gvy<cr>:call Osc52Yank()<cr><C-l>
+
+" Python - show only function def lines
+nnoremap <leader>def :v/def /d<cr>
