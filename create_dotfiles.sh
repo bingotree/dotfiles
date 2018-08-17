@@ -13,13 +13,7 @@ mkdir -p $archive
 # Configure the 'files' line below to include/exclude any files you
 # would like generated.
 files="bashrc bashrc.d vimrc screenrc bash_profile tmux.conf"
-for file in $files; do
-    if [ -d ~/.$file ]; then
-        echo "Creating directory .$file in $archive";
-        cp -r ~/.$file $archive
-    else
-        echo "Copying file .$file to $archive";
-        mv ~/.$file $archive
-    fi
-    ln -s $dest/$file ~/.$file
+for f in $files; do
+    mv -i "$HOME/.$f" "$archive"
+    ln -s "$dest/$f" "$HOME/.$f"
 done

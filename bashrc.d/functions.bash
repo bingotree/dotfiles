@@ -2,6 +2,55 @@
 # BASH comparison operators: http://tldp.org/LDP/abs/html/comparison-ops.html
 
 
+    # TODO alphabetize by kind
+    # domain, curl, nslookup_stuff
+    function when_back_up() {
+        domain="$1"
+        for i in {1..10000}
+        do
+            d=$(domain_status $domain 1)
+            if [ "$d" -lt "500" ]; then
+                mail -s "$domain is back up" "$GIT_AUTHOR_EMAIL" <<< "$(date) $d"
+                echo $d
+                date
+                return 0
+            else
+                echo "still $d"
+            fi
+        sleep 2
+        done
+    }
+    function when_url_back_up() {
+        url="$1"
+        for i in {1..10000}
+        do
+            d=$(curl -s -g -k "$url" -D - -o /dev/null | head -1 | cut -f2 -d' ')
+            if [ "$d" -lt "500" ]; then
+                mail -s "$url is back up" "$GIT_AUTHOR_EMAIL" <<< "$(date) $d"
+                echo $d
+                date
+                return 0
+            else
+                echo "still $d"
+            fi
+        sleep 25
+        done
+    }
+
+    function domain_status() {
+        domain="$1"
+        statusCodeOnly="$2"
+        real_domain=$(nslookup $domain | grep canonical | cut -f2 -d= | cut -f2 -d' ')
+
+        # Print HTTP status if domain is pingable
+        if [ "$statusCodeOnly" ]; then
+            ping -c 1 $real_domain > /dev/null && curl -s -g -k "https://$real_domain" -D - -o /dev/null | head -1 | cut -f2 -d' '
+        else
+            ping -c 1 $real_domain > /dev/null && curl -s -g -k "https://$real_domain" -D - -o /dev/null
+        fi
+    }
+
+    # misc
     function cleanup {
         for f in  $(find . -type f -iname *\.sw[mop]); do rm -i $f; done
         for f in  $(find . -type f -iname *\.orig); do rm -i $f; done
@@ -346,6 +395,7 @@
         fi
     }
 
+    # TODO remove, this is basically xargs
     function oneline {
         for i in "$@"; do
             echo -n "$i "
@@ -389,40 +439,7 @@
     function dockerkillall() {
         docker ps | awk '{print $1}' | awk 'FNR > 1 {print}' | xargs docker kill
     }
-
-## Function archive
-    # CVS Functions --
-    # Also check out cvstags in ~/bin for listing tags.
-    # Dependencies: colordiff, patch
-    export CVS_STASH=$HOME/.cvsstash.patch
-
-    # colorized, patchable diff.
-    function cvsd () { cvs diff -u $@ | colordiff; }
-    function cvsdl () { cvs diff -u $@ | colordiff | less -R; }
-
-    # revert shortcut, prompts for file deletion, then updates.
-    function cvsrevert () { rm -i $@ | cvs update $@; }
-
-    # Get patchable, colorized diff output between two revisions. 
-    function cvscompare () {  
-        if [ $# -lt 3 ]; then
-            echo "Usage: cvscompare <tag1> <tag2> <files or path>";
-            echo "Use cvstags -l to list all available tags.";
-            return 1;
-        fi
-        rev1=$1; 
-        rev2=$2; 
-        shift 2; 
-        cvs diff -N -c -u -r $rev1 -r $rev2 $@ | colordiff; 
+    # GREP
+    function grept() {
+        grepf "$@" | xargs ls -lt | less
     }
-
-    function cvsstash () { cvsd $@ > $CVS_STASH; echo -e "\n\nCVS STASH\n\n"; cat $CVS_STASH; cvsrevert $@;}
-    function cvsunstash () { patch -p0 < $CVS_STASH; }
-    function cvslastdiff() { cvs diff -u -r $(cvs log $1 | grep ^revision | head -n 2 | tail -n 1 | cut -c 10-) -r $(cvs log $1 | grep ^revision | head -n 1 | cut -c 10-) $1 | colordiff; }
-
-
-    alias cvsr=cvsrevert
-    alias cvss=cvsstash
-    alias cvsu=cvsunstash
-    alias cvsc=cvscompare
-    alias cvsld=cvslastdiff

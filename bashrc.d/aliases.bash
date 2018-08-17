@@ -1,5 +1,3 @@
-balias_grep_exclude_pattern='--exclude-dir={\.git,\.svn,\.data,\.temp} --exclude=tags'
-
 ls --color &> /dev/null
 if [ $? ]; then
     alias la='ls -laFG'
@@ -14,18 +12,17 @@ alias a="tmux attach"
 alias e="echo"
 alias lt="ls -lt"
 alias mr="ls -1t | head -1"
-alias rc="source ~/.bashrc"
-alias grepr="grep --color=always -rsn $balias_grep_exclude_pattern"
-alias grepri="grep --color=always -rsin $balias_grep_exclude_pattern"
-alias grepn="grep -n $balias_grep_exclude_pattern"
-alias grepf="grep -lrs $balias_grep_exclude_pattern"
-alias svnm='svn status | grep "^M"'
-alias svns='svn status | grep "^[^?]"'
+alias grepr="grep --color=always -rsn $BGREP_EXCLUDE"
+alias grepri="grep --color=always -rsin $BGREP_EXCLUDE"
+alias grepn="grep -n $BGREP_EXCLUDE"
+alias grepf="grep -lrs $BGREP_EXCLUDE"
 alias md='mkdir'
-alias balias="cat ~/.bashrc.d/aliases.bash; source ~/.bashrc.d/aliases.bash"
-alias baliasedit="vi ~/.bashrc.d/aliases.bash"
-alias bfunc="cat ~/.bashrc.d/functions.bash; source ~/.bashrc.d/functions.bash"
-alias bfuncedit="vi ~/.bashrc.d/functions.bash"
+alias rc="source ~/.bashrc"
+alias balias="cat $BALIAS_FILES; source $BALIAS_FILES"
+alias baliasedit="vs $BALIAS_FILES"
+alias bfunc="cat $BFUNC_FILES; source $BFUNC_FILES"
+alias bfuncedit="vs $BFUNC_FILES"
+alias benv="cat $BENV_FILES; source $BENV_FILES"
 alias bps="ps -aux | grep $(whoami)"
 alias sd="DS=`pwd`"
 alias sdd="DSS=`pwd`"
@@ -33,7 +30,7 @@ alias ds="cd $DS"
 alias dss="cd $DSS"
 alias vlci="vlc -I ncurses"
 alias pathedit="vi ~/.bash_profile"
-alias errlog="tail -f $PHP_LOG"
+alias errlog="tail -f $SYSTEM_ERROR_LOG"
 alias swp='find . -name *.swp'
 alias diff='diff -u'
 alias vs='vi -O'
