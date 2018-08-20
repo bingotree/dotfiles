@@ -19,7 +19,7 @@ export BGREP_EXCLUDE='--exclude-dir={\.npm,\.git,\.svn,\.data,\.temp} --exclude=
 # - Aliases last
 for f in $BENV_FILES; do if [ -f "$f" ]; then source $f; fi done
 for f in $BFUNC_FILES; do if [ -f "$f" ]; then source $f; fi done
-for f in $BALIAS_FILES; do if [ -f "$f" ]; then echo $f; source $f; fi done
+for f in $BALIAS_FILES; do if [ -f "$f" ]; then source $f; fi done
 
 # Turn off flow control in order to use forward searching in readline
 stty -ixon
