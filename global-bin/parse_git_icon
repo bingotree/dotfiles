@@ -1,0 +1,11 @@
+#!/bin/bash
+if [ $? -eq "0" ]; then
+    GITHUB_ICON=""
+    if [ "$GIT_AUTHOR_EMAIL" = "brian@bingotree.com" ]; then
+        GITHUB_ICON="$LCYAN𝑔"
+    fi
+    if [ "$GIT_AUTHOR_EMAIL" = "bduncan@yelp.com" ]; then
+        GITHUB_ICON="${RED}Y"
+    fi
+fi
+echo -e $GITHUB_ICON

@@ -1,0 +1,10 @@
+#!/bin/bash
+yank="$*"
+buff=$(echo "$yank" | perl -p -e 'chomp if eof' | base64 -w0)
+buff="\e]52;c;$buff\x07"
+
+if [ "$TMUX" ]; then
+    buff="\ePtmux;\e$buff\e\\"
+fi
+
+echo -ne "$buff" > /dev/tty

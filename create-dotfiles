@@ -12,7 +12,7 @@ mkdir -p $archive
 # Make sure you have the revisioned copy of this file in $dest
 # Configure the 'files' line below to include/exclude any files you
 # would like generated.
-files="bashrc bashrc.d vimrc screenrc bash_profile tmux.conf"
+files="bashrc bashrc.d global-bin vimrc screenrc bash_profile tmux.conf"
 for f in $files; do
     mv -i "$HOME/.$f" "$archive"
     ln -s "$dest/$f" "$HOME/.$f"

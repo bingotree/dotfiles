@@ -8,6 +8,7 @@ else
     alias ll='ls -lF --color=auto'
     alias ls='ls -F --color=auto'
 fi
+alias cd="dss"
 alias a="tmux attach"
 alias e="echo"
 alias lt="ls -lt"
@@ -24,10 +25,6 @@ alias bfunc="cat $BFUNC_FILES; source $BFUNC_FILES"
 alias bfuncedit="vs $BFUNC_FILES"
 alias benv="cat $BENV_FILES; source $BENV_FILES"
 alias bps="ps -aux | grep $(whoami)"
-alias sd="DS=`pwd`"
-alias sdd="DSS=`pwd`"
-alias ds="cd $DS"
-alias dss="cd $DSS"
 alias vlci="vlc -I ncurses"
 alias pathedit="vi ~/.bash_profile"
 alias errlog="tail -f $SYSTEM_ERROR_LOG"

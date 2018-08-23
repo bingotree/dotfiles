@@ -3,6 +3,75 @@
 
 
     # TODO alphabetize by kind
+    function prompt_password() {
+        echo -n Password:
+        read -s PASSWORD
+        # TODO call function with password
+        # TODO trap to ensure that PASSWORD is always cleared out
+        PASSWORD=""
+    }
+
+    # Removes the eof marker from the end of all arguments
+    # e.g.  chomp_eof file.txt
+    function chomp_eof() {
+        perl -p -e 'chomp if eof' $1
+    }
+    function chomp() {
+        perl -p -e 'chomp' "$*"
+    }
+
+    # Takes a string and splits it
+    function replace() {
+        string="$1"
+        token="$2"
+    }
+    function uniq_no_sort() {
+        awk '!x[$0]++' "$*"
+    }
+
+    function option_uniq() {
+       tr ' ' "\n" <<< "$1" | uniq_no_sort | xargs
+    }
+
+    # Displays the current directory stack as a menu
+    function ds() {
+        # Allows user to choose which directory to go to.
+        PS3="Choose an option > "
+        if [ "$DS" ]; then
+            select option in $(option_uniq "$DS"); do
+                command cd "$option"
+                return
+            done
+        else
+            echo "Directory stack is empty."
+        fi
+    }
+    # Save (push) the current directory onto the stack.
+    function dss() {
+        if [ "$DS" ]; then
+            DS="$DS $1"
+        else
+            DS="$1"
+        fi
+        command cd $1
+    }
+    function dsp() {
+        # Pop the current item off the stack,
+        # push the current directory onto the stack,
+        # cd to popped directory.
+        if [ "$DS" ]; then
+            local lastdir="$(echo $DS | awk '{ print $NF }')"
+            DS="$(echo $DS | awk '{$NF="";print $0}')"
+            command cd "$lastdir"
+        else
+            echo "Directory stack is empty."
+        fi
+    }
+    # Clear the directory stack
+    function dsc() {
+        DS=""
+    }
+
     # domain, curl, nslookup_stuff
     function when_back_up() {
         domain="$1"
