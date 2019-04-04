@@ -13,18 +13,16 @@ alias a="tmux attach"
 alias e="echo"
 alias lt="ls -lt"
 alias mr="ls -1t | head -1"
+alias unfunc="unset -f"
 alias grepr="grep --color=always -rsn $BGREP_EXCLUDE"
 alias grepri="grep --color=always -rsin $BGREP_EXCLUDE"
 alias grepn="grep -n $BGREP_EXCLUDE"
 alias grepf="grep -lrs $BGREP_EXCLUDE"
 alias md='mkdir'
 alias rc="source ~/.bashrc"
-alias balias="cat $BALIAS_FILES; source $BALIAS_FILES"
 alias baliasedit="vs $BALIAS_FILES"
-alias bfunc="cat $BFUNC_FILES; source $BFUNC_FILES"
 alias bfuncedit="vs $BFUNC_FILES"
-alias benv="cat $BENV_FILES; source $BENV_FILES"
-alias bps="ps -aux | grep $(whoami)"
+alias benvedit="vs $BENV_FILES"
 alias vlci="vlc -I ncurses"
 alias pathedit="vi ~/.bash_profile"
 alias errlog="tail -f $SYSTEM_ERROR_LOG"
@@ -46,6 +44,11 @@ alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^
 alias www="cd $WWW"
 alias filesize="du -sh" #disk usage
 alias npm-exec='PATH=$(npm bin):$PATH'
+alias se="source $SSH_ENV"
+
+# cURL
+alias mobile_curl='curl -v -A "Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3"'
+alias curl_agent='curl -v -A'
 
 # Docker.
 alias dockervm='docker-machine ls'

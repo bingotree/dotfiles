@@ -3,12 +3,27 @@
 
 
     # TODO alphabetize by kind
+    function img_to_base64 {
+        local file="$1"
+        local converted=$(base64 -w0 "$file")
+        echo $converted
+    }
+    function img_to_base64_html {
+        local file="$1"
+        local mime=$(mime "$file")
+        local data=$(img_to_base64 "$file")
+        echo "<img src='data:$mime;base64,$data'>"
+    }
     function prompt_password() {
         echo -n Password:
         read -s PASSWORD
         # TODO call function with password
         # TODO trap to ensure that PASSWORD is always cleared out
         PASSWORD=""
+    }
+
+    function implode {
+        local IFS="$1"; shift; echo "$*";
     }
 
     # Removes the eof marker from the end of all arguments
@@ -471,9 +486,6 @@
         done
         echo
     }
-    function vsgrep {
-       vim -O $(oneline $(grep -lrs --exclude="*.svn*\|^\.\/temp\|^\.\/data\|^\.\/\.git" "$@" . | grep -v "^Binary file\|*\.swp$"))
-    }
 
     function vsgitlast {
         vim -O $(git log --name-only --oneline HEAD^..HEAD | awk 'NR > 1 { print }' | xargs)
@@ -509,6 +521,21 @@
         docker ps | awk '{print $1}' | awk 'FNR > 1 {print}' | xargs docker kill
     }
     # GREP
+    function vsgrep {
+       vim -O $(grepf "$@" . | xargs)
+    }
     function grept() {
         grepf "$@" | xargs ls -lt | less
+    }
+    function balias {
+        cat $BALIAS_FILES
+        for f in $BALIAS_FILES; do source $f; done
+    }
+    function benv {
+        cat $BENV_FILES
+        for f in $BENV_FILES; do source $f; done
+    }
+    function bfunc {
+        cat $BFUNC_FILES
+        for f in $BFUNC_FILES; do source $f; done
     }
