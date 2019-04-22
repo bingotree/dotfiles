@@ -2,10 +2,13 @@
 # BASH comparison operators: http://tldp.org/LDP/abs/html/comparison-ops.html
 
 # Format
-# - loosely grouped by categories
+# - Group by categories
 # - functions starting with '_' are typically oneshot functions
 #     that have no use other than within other functions
 #     in essence, you would rarely if ever call them from the command line
+# - Include a newline after each function to facilitate hunk-splitting and
+#     sectional movement in vim.
+
 
 # SEARCHING - Find and GREP
 # FIND
@@ -31,12 +34,12 @@ function fclass {
         grepr "[cC]lass\s*$1" $2;
     fi
 }
+
 # GREP
 # based on time - latest
 function grept {
     grepf "$@" | xargs ls -lt | less
 }
-
 
 # MATH helpers
 function roll_die {
@@ -88,30 +91,26 @@ function num_diff {
 }
 
 # BASH utilities - making scripting and piping easier
-# TODO remove this and dependencies, this is basically xargs
+# Print out a user friendly time from a unix timestamp
+function t {
+    date -d @"$1"
+}
+
 # mv files and create intermediate directories if needed
-function mvp ()
-{
+function mvp  {
     for last; do true; done
         if [[ ! -e $last ]]; then
             mkdir -p $last
         fi
-        mv $@
+        mv "$@"
 }
 
 # Swap two files.
-function swap()
-{
+function swap {
     local TMPFILE=tmp.$$
     mv "$1" $TMPFILE
     mv "$2" "$1"
     mv $TMPFILE "$2"
-}
-function oneline {
-    for i in "$@"; do
-        echo -n "$i "
-    done
-    echo
 }
 
 function error_gen {
@@ -446,11 +445,16 @@ function vsgitlast {
 }
 
 function vsgitm {
-    vim -O $(oneline $(git status --porcelain | grep '^ M' | cut -d' ' -f3))
+    vim -O $(git status --porcelain | grep '^ M' | cut -d' ' -f3 | xargs)
 }
 
 function vsgitstaged {
     vim -O $(gitstaged)
+}
+
+# alias
+function vsgits {
+    vsgitstaged
 }
 
 # DOCKER
