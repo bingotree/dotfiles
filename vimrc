@@ -44,6 +44,7 @@ set nopaste
 set showmatch  " Show matching brackets.
 set incsearch  " Incremental search, ie go to search term as you type it.
 set hlsearch   " Highlight search results.
+set wildignore+=*.pyc " Ignore these files for filename autocompletion
 " set textwidth=80
 
 " Set tabs and shiftwidths
@@ -108,6 +109,9 @@ cnoremap w!! w !sudo tee >/dev/null % " What does this do?
 " Set Mapleader
 let mapleader = ";"
 
+" Trim (end) trailing whitespace
+nnoremap <leader>et :%s/\v\s+$//g<cr>
+
 " Edit and source vimrc file quickly
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
@@ -116,8 +120,15 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <space> dd
 vnoremap <space> d
 
-" Create new line with enter key, stay in normal mode.
-nnoremap <leader><cr> mzI<cr><esc>`zj
+" Create new line after current line, stay in normal mode.
+nnoremap <leader><cr> mzo<esc>`z
+
+" Move line (and everything below it, down)
+nnoremap <leader>j mzO<esc>`z
+
+" Clobber line above, stay in normal mode
+" TODO detect if movement was a success first.
+nnoremap <leader>k mzkdd<cr><esc>`z
 
 " Indent in normal mode
 nnoremap <leader><tab> V>
@@ -164,8 +175,6 @@ nnoremap <leader>h "zdhph
 "Search for letter under cursor
 nnoremap <leader>z "zyl/<C-R>z<cr>
 
-"Search for entire highlighted stuff
-vnoremap <leader>z "zy/<C-R>z<cr>
 
 "Get rid of highlighting
 nnoremap <leader>nh :nohl<cr>
@@ -176,7 +185,19 @@ nnoremap <leader>php :set syntax=php<cr>
 
 " Visual mode shortcuts
 
-" Select java-style comment blocks.
+"Yank highlighted stuff into special buffer.
+vnoremap <leader>z "zy
+
+"Yank and search for highlighted stuff in special buffer
+vnoremap <leader>/ "zy/<C-R>z
+
+" Set up find and replace pattern
+"   pattern - from special buffer
+"   range - the highlighted fields
+vnoremap <leader>: :s/<C-R>z//g<C-B><C-B>
+nnoremap <leader>: :s/<C-R>z//g<C-B><C-B>
+
+" Select c-style comment blocks.
 vnoremap i* ?/\*<CR>vv/\*\/<CR>ll
 vnoremap a* <esc>0v/\/\*<CR>vv/\*\/<CR>ll
 
@@ -193,7 +214,7 @@ noremap <leader><leader>s :setlocal spell!<cr>
 noremap <leader><leader>p :setlocal paste!<cr>
 
 " Move to the top of the file
-nnoremap <leader><leader><space> gg
+nnoremap <leader><space> gg
 
 " Move selections around.
 " TODO
@@ -294,7 +315,6 @@ autocmd BufRead,BufNewFile *.py   set shiftwidth=4 tabstop=4
 autocmd BufNewFile,BufRead *.asm set syntax=nasm filetype=nasm shiftwidth=4 tabstop=4
 autocmd BufRead,BufNewFile Makefile   set noexpandtab shiftwidth=4 tabstop=4
 
-
 """"""""""""""""""""""""""""""""""
 "                                "
 "         Vim plugins            "
@@ -344,3 +364,7 @@ vnoremap <leader>y :<C-u>norm! gvy<cr>:call Osc52Yank()<cr><C-l>
 
 " Python - show only function def lines
 nnoremap <leader>def :v/def /d<cr>
+
+" Globally highlight trailing whitespace in red.
+syntax match TrailingWhitespace /\v\s+$/
+highlight TrailingWhitespace ctermbg=Red guibg=Red

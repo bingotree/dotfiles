@@ -9,21 +9,23 @@
 # - Include a newline after each function to facilitate hunk-splitting and
 #     sectional movement in vim.
 
+# See - https://google.github.io/styleguide/shell.xml
+
 
 # SEARCHING - Find and GREP
 # FIND
 # Find a function.
 function ffunc {
     if [ -z "$2" ]; then
-        grepr "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(\|\s*def\s*$1\s*" .;
+        grepr "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(\|\s*def\s*$1\s*" .
     else
-        grepr "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(\|\s*def\s*$1\s*" $2;
+        grepr "$1[ \"']*[:=]\s*function\|function\s*&\?\s*$1\s*(\|\s*def\s*$1\s*" "$2"
     fi
 }
 
 # Find a js function
 function fjsfunc {
-    rgrep "$1\s*=\s*function\s*(" .;
+    grepr "$1\s*=\s*function\s*(" .;
 }
 
 # Find a class.
@@ -268,15 +270,12 @@ function print_unicode_range {
     done
 }
 
+# Example print_unicode_block 15 32
 function print_unicode_block {
     # 256 blocks per plane ... so
     # address of first block = (2^8) * (plane - 1)
-    local plane # integer in range 0-16
-    local block # integer in range 0-255
-    local first_block
-    local block_address
-    plane="$1"
-    block="$2"
+    local plane="$1" # integer in range 0-16
+    local block="$2" # integer in range 0-255
     let first_block=$(( 256*plane ))
     let block_address=$(( first_block+block ))
     for i in {0..255}
@@ -305,11 +304,14 @@ function int_to_unicode {
     printf "\\u$hex"
 }
 
+function hex_to_ascii {
+	printf "\\x${1}"
+}
+
 function int_to_ascii {
-    local c
-    c=$(printf %x "$1")
-    # shellcheck disable=SC2059
-    printf "\\x$c"
+	local i="$1"
+    local h="$(int_to_hex ${i})"
+	hex_to_ascii "$h"
 }
 
 function ascii_to_int {
@@ -388,50 +390,63 @@ function gitsteamroll {
 
 # URL and HTML encoding - decoding
 # Decode url encodings, either a file or a string.
-# TODO piping is not working for these functions
 function urldecode {
     # urldecode <string>
-    local url_encoded="${1//+/ }"
-    printf '%b' "${url_encoded//%/\\x}"
+    if [[ $# -eq 1 ]]
+    then
+        local url_encoded="${1//+/ }"
+        printf '%b' "${url_encoded//%/\\x}\n"
+    else
+        # handle stdin
+        read -r str
+        urldecode "${str}"
+    fi
 }
 
 function urlencode {
     # TODO - unit tests
-    old_lc_collate=$LC_COLLATE
-    LC_COLLATE=C
+    if [[ $# -eq 1 ]]
+    then
+        old_lc_collate=$LC_COLLATE
+        LC_COLLATE=C
 
-    local length="${#1}"
-    for (( i = 0; i < length; i++ )); do
-        local c="${1:i:1}"
-        case $c in
-            [a-zA-Z0-9.~_-]) printf "%s" "$c" ;;
-            *) printf '%%%02X' "'$c" ;;
-        esac
-    done
-    echo
-    LC_COLLATE=$old_lc_collate
+        local length="${#1}"
+        for (( i = 0; i < length; i++ )); do
+            local c="${1:i:1}"
+            case $c in
+                [a-zA-Z0-9.~_-]) printf "%s" "$c" ;;
+                *) printf '%%%02X' "'$c" ;;
+            esac
+        done
+        LC_COLLATE=$old_lc_collate
+        echo
+    else
+        # handle stdin
+        read -r str
+        urlencode "${str}"
+    fi
 }
-
-# TODO compare this to urldecode above via unit tests
-# function url_decode {
-#    if [ -f $1 ];  then
-#        cat $1 | sed -e 's/+/ /g' | sed -e's/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g' | xargs echo -e ;
-#    else
-#        echo $1 | sed -e 's/+/ /g' | sed -e's/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g' | xargs echo -e ;
-#    fi
-#}
 
 # TODO check dependencies
 # Dependencies: perl with MHTML library.
 function htmlentity_decode {
     if [ -z "$2" ]; then
-        cat $2 | perl -MHTML::Entities -le 'while(<>) {print decode_entities($_);}'
+        echo "$1" | perl -MHTML::Entities -le 'while(<>) {print decode_entities($_);}'
     else
-        echo "$2" | perl -MHTML::Entities -le 'while(<>) {print decode_entities($_);}'
+        perl -MHTML::Entities -le 'while(<>) {print decode_entities($_);}' < "$2"
     fi
 }
 
 # VIM
+# Create directory tree structure if needed for file to be opened.
+function vsp {
+    filepath=$(dirname "$1")
+    if [[ $? -eq 0 ]]
+    then
+        mkdir -p "${filepath}"
+        vim -O "$1"
+    fi
+}
 function vsdir {
     vim -O $(find "$@" -type f | xargs)
 }
@@ -440,9 +455,6 @@ function vsgrep {
    vim -O $(grepf "$@" . | xargs)
 }
 
-function vsgitlast {
-    vim -O $(git log --name-only --oneline HEAD^..HEAD | awk 'NR > 1 { print }' | xargs)
-}
 
 function vsgitm {
     vim -O $(git status --porcelain | grep '^ M' | cut -d' ' -f3 | xargs)
@@ -450,6 +462,24 @@ function vsgitm {
 
 function vsgitstaged {
     vim -O $(gitstaged)
+}
+
+# given a commit hash, opens up the files modified in that commit.
+function vsgit {
+    local start=HEAD
+    local end=HEAD
+    if [[ $# -eq 1 ]]; then
+        start="$1"
+        end="$1"
+    elif [[ $# -eq 2 ]]; then
+        start="$1"
+        end="$2"
+    fi
+    vim -O $(git log --name-only --oneline "${start}"^.."${end}" | sed -n -e '/^\w\{7\}/!p' | sort -u | xargs)
+}
+
+function vsgitlast {
+    vsgit HEAD
 }
 
 # alias
@@ -467,7 +497,7 @@ function dockerrm {
 }
 
 function dockerbash {
-    if [ -z $1 ]
+    if [ -z "$1" ]
     then
         echo 'Usage: dockerbash [containerID|containerName] ';
     else
